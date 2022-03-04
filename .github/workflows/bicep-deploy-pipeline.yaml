@@ -30,7 +30,7 @@ jobs:
         uses: azure/login@v1.4.3
         with:
           creds: ${{secrets.AZURE_CREDENTIALS}}
-          enable-AzPSSession: true 
+          enable-AzPSSession: false 
 
       - name: Azure Powershell - what-if
         uses: azure/powershell@v1

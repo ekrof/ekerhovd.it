@@ -18,10 +18,6 @@ jobs:
       location: 'west europe'
 
     steps:
-      # Checkout the repository to the GitHub Actions runner
-      - name: Checkout
-        uses: actions/checkout@v2
-
       # az ad sp create-for-rbac --name bicep-deploy-sp --role contributor --scopes /subscriptions/{SUBSCRIPTION_ID}/resourceGroups/{RG_NAME} --sdk-auth 
       # Copy the output and create a new secret in github with the format below. 
       # Login to azure using azure_credetials in github. See below for format sample:

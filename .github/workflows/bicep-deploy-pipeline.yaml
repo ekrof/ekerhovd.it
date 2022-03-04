@@ -27,7 +27,7 @@ jobs:
       #    "tenantId":   "55555555-4444-3333-2222-111111111111"
       # }
       - name: 'Azure Login - Login'
-        uses: azure/login@v1
+        uses: azure/login@v1.4.3
         with:
           creds: ${{secrets.AZURE_CREDENTIALS}}
           enable-AzPSSession: true 

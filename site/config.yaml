@@ -1,17 +1,17 @@
-baseurl: https://example.com
+baseurl: https://ekerhovd.it
 languageCode: en-us
-theme: stack
+theme: hugo-theme-stack
 paginate: 5
 title: Ekerhovd
 
 languages:
     en:
         languageName: English
-        title: Example Site
+        title: Ekerhovd IT
         weight: 1
-    cn:
-        languageName: 中文
-        title: 演示站点
+    no:
+        languageName: Norwegian
+        title: Ekerhovd IT
         weight: 2
 
 # Change it to your Disqus shortname before using

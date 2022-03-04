@@ -5,24 +5,14 @@
       "location_short": {
         "value": "weu"
       },
-      "vnetAddressPrefix": {
-        "value": "10.30.2.0/24"
-      },
       "tags":{
           "value": {
-            "ManagedByTag" : "CloudOps",
+            "ManagedByTag" : "Jonas",
             "ManagementLevelTag": "Managed",
             "EnvironmentTag": "Production",
-            "ServiceNameTag": "Shared-Infra",
-            "CostCenterTag": "Shared-Infra"
+            "ServiceNameTag": "Website",
+            "CostCenterTag": "Website"
           }
-      },
-
-      "subnets": {
-        "value": [
-          "10.30.2.1/25"
-         
-        ]
       }
       
     }

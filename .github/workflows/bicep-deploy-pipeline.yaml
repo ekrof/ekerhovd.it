@@ -1,0 +1,58 @@
+# This is a flow for deploying management subscription in the Azure Platform
+# To activate this workflow, move it to .github/workflows folder in this repo, edit the variables under env and commit changes.
+name: Bicep deploy Static Web App
+
+# Tirggers
+on:
+  push:
+    paths:
+      - 'bicep/**'
+
+jobs:
+  verify-and-deploy:
+    runs-on: ubuntu-latest
+
+    # Variables used in the actions     
+    env:
+      # Variables needed by the pipline
+      location: 'west europe'
+
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # az ad sp create-for-rbac --name bicep-deploy-sp --role contributor --scopes /subscriptions/{SUBSCRIPTION_ID}/resourceGroups/{RG_NAME} --sdk-auth 
+      # Copy the output and create a new secret in github with the format below. 
+      # Login to azure using azure_credetials in github. See below for format sample:
+      # {
+      #    "clientId":   "00000000-1111-2222-3333-444444444444",
+      #    "clientSecret": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      #    "tenantId":   "55555555-4444-3333-2222-111111111111"
+      # }
+      - name: 'Azure Login - Login'
+        uses: azure/login@v1
+        with:
+          creds: ${{secrets.AZURE_CREDENTIALS}}
+          enable-AzPSSession: true 
+
+      - name: Azure Powershell - what-if
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+            $timestamp = get-date -format "yyyymmMMHHmm"
+            Select-AzSubscription -SubscriptionId '7b7ad20a-62c7-4350-b5c2-e783fc3353ee'
+            New-AzSubscriptionDeployment -name "bicep-swa-deploy-$timestamp" -Location 'west europe' -TemplateFile 'bicep/swa.bicep' -TemplateParameterFile 'bicep/parameters.json' -verbose -Whatif
+          azPSVersion: "latest"
+
+      - name: Azure Powershell - deployment
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+            $timestamp = get-date -format "yyyymmMMHHmm"
+            Select-AzSubscription -SubscriptionId '7b7ad20a-62c7-4350-b5c2-e783fc3353ee'
+            New-AzSubscriptionDeployment -name "bicep-swa-deploy-$timestamp" -Location 'west europe' -TemplateFile 'bicep/swa.bicep' -TemplateParameterFile 'bicep/parameters.json' -verbose
+          azPSVersion: "latest"
+
+          

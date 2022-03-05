@@ -2,7 +2,7 @@ baseurl: https://ekerhovd.it
 languageCode: en-us
 theme: hugo-theme-stack
 paginate: 5
-title: Ekerhovd
+title: Jonas Ekerhovd
 
 languages:
     en:
@@ -48,23 +48,22 @@ params:
         lastUpdated: Jan 02, 2006 15:04 MST
 
     sidebar:
-        emoji: 🍥
-        subtitle: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        emoji: ☁️
+        subtitle: 
         avatar:
             enabled: true
-            local: true
-            src: img/avatar.png
-
+            local: false
+            src: images/Jonas_Ekerhovd-grayscale.jpg
     article:
         math: false
         toc: true
         readingTime: true
         license:
-            enabled: true
+            enabled: false
             default: Licensed under CC BY-NC-SA 4.0
 
     comments:
-        enabled: true
+        enabled: false
         provider: disqus
 
         disqusjs:
@@ -191,21 +190,24 @@ menu:
           weight: -100
           params:
               ### For demonstration purpose, the home link will be open in a new tab
-              newTab: true
+              newTab: false
               icon: home
+         
+        - identifier: about
+          name: About
+          url: /about
+          weight: -90
+          params:
+              ### For demonstration purpose, the home link will be open in a new tab
+              newTab: false
+              icon: user
 
     social:
         - identifier: github
           name: GitHub
-          url: https://github.com/CaiJimmy/hugo-theme-stack
+          url: https://github.com/ekrof
           params:
               icon: brand-github
-
-        - identifier: twitter
-          name: Twitter
-          url: https://twitter.com
-          params:
-              icon: brand-twitter
 
 related:
     includeNewer: true

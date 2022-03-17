@@ -7,7 +7,7 @@ title: Jonas Ekerhovd
 languages:
     en:
         languageName: English
-        title: Ekerhovd IT
+        title: Jonas Ekerhovd
         weight: 1
 #   no:
 #       languageName: Norwegian
@@ -29,7 +29,7 @@ DefaultContentLanguage: en
 hasCJKLanguage: false
 
 permalinks:
-    post: /p/:slug/
+    post: /blog/:slug/
     page: /:slug/
 
 params:
@@ -37,7 +37,7 @@ params:
         - post
     featuredImageField: image
     rssFullContent: true
-    favicon:
+    favicon: images/favicon.ico
 
 #    footer:
 #        since: 2022
@@ -49,11 +49,11 @@ params:
 
     sidebar:
         emoji: ☁️
-        subtitle: 
+        subtitle: Personal Blog
         avatar:
             enabled: true
-            local: false
-            src: images/Jonas_Ekerhovd-grayscale.jpg
+            local: true
+            src: img/Jonas_Ekerhovd-grayscale.jpg
     article:
         math: false
         toc: true

@@ -26,12 +26,11 @@ I am a full-time IT-consultant located in Bergen, Norway with a long experience 
 ![Photo by Florian Klauer on Unsplash](monstera.jpg)  
 
 
-
 ## About this site
 **Hosting Provider**: Azure Static Web Apps 
-<img src="https://res.cloudinary.com/practicaldev/image/fetch/s--KZm0uns2--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://jhandcdn.blob.core.windows.net/blob/static-web-apps.png" width="20" height="20">
+{{< rawhtml >}}<img src="https://res.cloudinary.com/practicaldev/image/fetch/s--KZm0uns2--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://jhandcdn.blob.core.windows.net/blob/static-web-apps.png" width="20" height="20">{{< /rawhtml >}}
 
-**CI/CD**: GitHub Actions <img src="https://github.githubassets.com/images/modules/site/features/actions-icon-actions.svg" width="20" height="20"> 
+**CI/CD**: GitHub Actions {{< rawhtml >}}<img src="https://github.githubassets.com/images/modules/site/features/actions-icon-actions.svg" width="20" height="20">{{< /rawhtml >}}
 
 **Web Framework:** [Hugo](https://gohugo.io/)
 

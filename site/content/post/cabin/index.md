@@ -6,6 +6,4 @@ image: monstera.jpg
 categories:
     - Minimalism
 ---
-
-# sdfnwjefhi
-wefwe
+I'm at the cabin

@@ -1,6 +1,6 @@
 baseurl: https://ekerhovd.it
 languageCode: en-us
-theme: hugo-theme-stack
+theme: ["hugo-cloak-email", "hugo-theme-stack"]
 paginate: 5
 title: Jonas Ekerhovd
 
@@ -199,6 +199,19 @@ menu:
           url: https://github.com/ekrof
           params:
               icon: brand-github
+
+        - identifier: linkedin
+          name: LinkedIn
+          url: https://www.linkedin.com/in/jonasekerhovd/
+          params:
+              icon: brand-linkedin
+
+        - identifier: email
+          name: Email
+          url: "https://ekerhovd.it/about"
+          params:
+              icon: at
+
 
 related:
     includeNewer: true

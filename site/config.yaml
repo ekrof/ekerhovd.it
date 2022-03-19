@@ -208,7 +208,7 @@ menu:
 
         - identifier: email
           name: Email
-          url: "https://ekerhovd.it/about"
+          url: ({{< ref "about.md" >}})
           params:
               icon: at
 

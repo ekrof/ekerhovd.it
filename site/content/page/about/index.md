@@ -18,15 +18,17 @@ menu:
 # Hi! I'm Jonas!
 
 👋 Hello! My name is Jonas Ekerhovd. 
-I am Cloud, DevOps, IT consultant, and all-round technology enthusiast 🌥
+I am a cloud architect, DevOps engineer, IT consultant, and all-round technology enthusiast 🌥
 
 Currently located in Bergen, Norway with a long experience with customer service relating to the IT sector. 
 
-I have a background with information technologies, strategy, marketing and economics. I run this project as a part-time gig taking on small to medium size projects from time to time. 
+I have a background with information technologies, strategy, marketing and economics. I run this project as a way to become a better writer, and sharing my thoughts about my field. 
 
-If you want to know more about my services and what I can do for you, please contact me using the email address below:
+If you want to get in touch, please contact me using the email address below:
 
 > **{{< cloakemail "jonas@ekerhovd.it" >}}**
+
+> PS: [Twitter DM's](https://twitter.com/messages/compose?recipient_id=1553769251994992640) are also open 🐦
 
 ---------
 ## Under the hood:

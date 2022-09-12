@@ -49,7 +49,7 @@ params:
 
     sidebar:
         emoji: ☁️
-        subtitle: Personal Blog
+        subtitle: Tech Blog
         avatar:
             enabled: true
             local: true
@@ -211,12 +211,6 @@ menu:
           url: https://www.twitter.com/@jonasekerhovd
           params:
               icon: brand-twitter
-
-        - identifier: email
-          name: Email
-          url: ({{< ref "/about" >}})
-          params:
-              icon: at
 
 
 related:

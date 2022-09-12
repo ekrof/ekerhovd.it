@@ -155,7 +155,7 @@ params:
     opengraph:
         twitter:
             # Your Twitter username
-            site:
+            site: JonasEkerhovd
 
             # Available values: summary, summary_large_image
             card: summary_large_image
@@ -171,7 +171,7 @@ params:
         toggle: true
 
         # Available values: auto, light, dark
-        default: auto
+        default: dark
 
     imageProcessing:
         cover:
@@ -206,9 +206,15 @@ menu:
           params:
               icon: brand-linkedin
 
+        - identifier: twitter
+          name: Twitter
+          url: https://www.twitter.com/@jonasekerhovd
+          params:
+              icon: brand-twitter
+
         - identifier: email
           name: Email
-          url: ({{< ref "about.md" >}})
+          url: ({{< ref "/about" >}})
           params:
               icon: at
 

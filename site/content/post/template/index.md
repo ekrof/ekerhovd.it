@@ -1,10 +1,15 @@
 ---
-title: "First post"
+title: "Template"
 date: 2022-03-05T14:57:34+01:00
-draft: false
+draft: true
 image: monstera.jpg
 categories:
     - Minimalism
+links:
+  - title: GitHub
+    description: GitHub is the world's largest software development platform.
+    website: https://github.com/ekrof/
+    image: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
 ---
 I'm at the cabin
 

@@ -2,17 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://example.org/</loc>
-    <lastmod>2022-03-01T16:08:11+01:00</lastmod>
+    <loc>https://ekerhovd.it/blog/coming-soon/</loc>
+    <lastmod>2022-09-12T14:57:34+01:00</lastmod>
   </url><url>
-    <loc>http://example.org/posts/my-first-post/</loc>
-    <lastmod>2022-03-01T16:08:11+01:00</lastmod>
+    <loc>https://ekerhovd.it/</loc>
+    <lastmod>2022-09-12T14:57:34+01:00</lastmod>
   </url><url>
-    <loc>http://example.org/posts/</loc>
-    <lastmod>2022-03-01T16:08:11+01:00</lastmod>
+    <loc>https://ekerhovd.it/post/</loc>
+    <lastmod>2022-09-12T14:57:34+01:00</lastmod>
   </url><url>
-    <loc>http://example.org/categories/</loc>
+    <loc>https://ekerhovd.it/about/</loc>
+    <lastmod>2022-03-05T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://example.org/tags/</loc>
+    <loc>https://ekerhovd.it/page/</loc>
+    <lastmod>2022-03-05T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://ekerhovd.it/archives/</loc>
+    <lastmod>2019-05-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://ekerhovd.it/categories/azure/</loc>
+  </url><url>
+    <loc>https://ekerhovd.it/categories/</loc>
+  </url><url>
+    <loc>https://ekerhovd.it/categories/iac/</loc>
+  </url><url>
+    <loc>https://ekerhovd.it/links/</loc>
+  </url><url>
+    <loc>https://ekerhovd.it/search/</loc>
+  </url><url>
+    <loc>https://ekerhovd.it/tags/</loc>
   </url>
 </urlset>

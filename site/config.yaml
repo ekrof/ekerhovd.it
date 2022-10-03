@@ -15,7 +15,7 @@ languages:
 #       weight: 2
 
 # Change it to your Disqus shortname before using
-disqusShortname: hugo-theme-stack
+disqusShortname: jonasekerhovd
 
 # GA Tracking ID
 googleAnalytics:
@@ -49,11 +49,11 @@ params:
 
     sidebar:
         emoji: ☁️
-        subtitle: Tech Blog
+        subtitle: Tech Blog - Learning in public
         avatar:
             enabled: true
             local: true
-            src: img/Jonas_Ekerhovd-grayscale.jpg
+            src: img/profile-pic.png
     article:
         math: false
         toc: true
@@ -63,8 +63,8 @@ params:
             default: Licensed under CC BY-NC-SA 4.0
 
     comments:
-        enabled: false
-        provider: disqus
+        enabled: true
+        provider: giscus
 
         disqusjs:
             shortname:
@@ -120,13 +120,13 @@ params:
             siteName: "" # You must insert a unique identifier here matching the one you registered (See https://cactus.chat/docs/getting-started/quick-start/#register-your-site)
 
         giscus:
-            repo:
-            repoID:
-            category:
-            categoryID:
-            mapping:
+            repo: ekrof/ekerhovd.it
+            repoID: R_kgDOG7Zm-Q
+            category: Announcements
+            categoryID: DIC_kwDOG7Zm-c4CRxfY
+            mapping: pathname
             lightTheme:
-            darkTheme:
+            darkTheme: dark
             reactionsEnabled: 1
             emitMetadata: 0
 
@@ -162,7 +162,7 @@ params:
 
     defaultImage:
         opengraph:
-            enabled: false
+            enabled: true
             local: false
             src:
 

@@ -20,15 +20,15 @@ menu:
 👋 Hello! My name is Jonas Ekerhovd. 
 I am a cloud architect, DevOps engineer, IT consultant, and all-round technology enthusiast 🌥
 
-Currently located in Bergen, Norway with a long experience with customer service relating to the IT sector. 
+Currently located in Bergen, Norway. I'm working as a cloud architect at Tietoevry.  
 
-I have a background with information technologies, strategy, marketing and economics. I run this project as a way to become a better writer, and sharing my thoughts about my field. 
+I have a background in information technology, strategy, marketing, and economics. I run this project as a way to become a better writer and share my thoughts about my field.
 
-If you want to get in touch, please contact me using the email address below:
+If you want to get in touch, please contact me on twitter or by emailing the address below:
 
 > **{{< cloakemail "jonas@ekerhovd.it" >}}**
 
-> PS: [Twitter DM's](https://twitter.com/messages/compose?recipient_id=1553769251994992640) are also open 🐦
+> PS: [Twitter DM's](https://twitter.com/messages/compose?recipient_id=1553769251994992640) are open 🐦
 
 ---------
 ## Under the hood:

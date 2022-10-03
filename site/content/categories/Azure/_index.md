@@ -2,7 +2,7 @@
 title: "Azure"
 description: "Azure category"
 slug: "azure"
-image: "hutomo-abrianto-l2jk-uxb1BY-unsplash.jpg"
+image: "chris-hardy-XF-ZLS5G0QU-unsplash.jpg"
 style:
     background: "#2a9d8f"
     color: "#fff"

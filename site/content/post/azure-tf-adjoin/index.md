@@ -1,17 +1,18 @@
 ---
 title: Troubleshooting Windows AD join on Azure with Terraform
-description: Recently, I experienced some issues when attempting to use terraform to join a Windows VM to an on-prem domain using JsonADDomain extension. In this post, we'll examine the most frequent approaches of solving this issue in both Azure and Terraform.
-date: 2022-10-15T13:19:11+02:00
-image: frontpage.png
+description: Recently, I experienced some issues when attempting to use terraform to join a Windows VM to an on-prem domain using JsonADDomain extension. In this post, we'll examine the most frequent approaches to solving this issue in both Azure and Terraform.
+date: "2022-10-15T13:19:11+02:00"
 math: 
 license: 
 hidden: false
 comments: true
 draft: false
+image: frontpage.png
 categories:
     - Azure
     - IaC
 ---
+
 
 ```terraform
 resource "azurerm_virtual_machine_extension" "vm_adjoin" {

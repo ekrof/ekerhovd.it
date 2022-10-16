@@ -6,7 +6,7 @@ math:
 license: 
 hidden: false
 comments: true
-draft: false
+draft: true
 image: frontpage.png
 categories:
     - Azure

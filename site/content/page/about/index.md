@@ -7,6 +7,7 @@ aliases:
 lastmod: '2022-03-05'
 image:
 draft: false
+readingTime: false
 menu: 
     main:
         name: About

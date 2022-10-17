@@ -18,7 +18,7 @@ menu:
 links:
   - title: Reboot 3AM one-liner test link
     description: Without creating scheduled task
-    website: scripts/reboot.md
+    website: scripts/
     image: https://www.freeiconspng.com/thumbs/restart-icon/black-panel-restart-system-icon--6.png
 
 ---

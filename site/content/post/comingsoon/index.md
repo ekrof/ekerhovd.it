@@ -1,7 +1,7 @@
 ---
 title: "Coming soon"
 date: 2022-09-12T14:57:34+01:00
-draft: false
+draft: true
 image: comingsoon.jpg
 categories:
     - 

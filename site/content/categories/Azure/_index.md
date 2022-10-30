@@ -9,7 +9,7 @@ style:
 menu: 
     main:
         name: Azure
-        weight: -80
+        weight: -60
         params:
             icon: azure
 ---

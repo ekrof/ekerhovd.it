@@ -1,7 +1,6 @@
 ---
 title: "Powershell"
 description: My collection of favorite PowerShell scripts
-date: 2022-10-16T21:36:25+02:00
 image: 
 math: 
 license: 
@@ -12,15 +11,9 @@ toc: true
 menu: 
     main:
         name: PowerShell
-        weight: -70
+        weight: -50
         params:
             icon: powershell
-links:
-  - title: Reboot 3AM one-liner test link
-    description: Without creating scheduled task
-    website: scripts/
-    image: https://www.freeiconspng.com/thumbs/restart-icon/black-panel-restart-system-icon--6.png
-
 ---
 
 ## Reboot (3am) oneliner:

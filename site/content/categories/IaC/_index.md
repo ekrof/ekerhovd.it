@@ -9,7 +9,7 @@ style:
 menu: 
     main:
         name: IaC
-        weight: -80
+        weight: -70
         params:
             icon: infinity
 ---

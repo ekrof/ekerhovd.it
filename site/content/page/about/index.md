@@ -8,6 +8,8 @@ lastmod: '2022-03-05'
 image:
 draft: false
 readingTime: false
+toc: false
+comments: false
 menu: 
     main:
         name: About

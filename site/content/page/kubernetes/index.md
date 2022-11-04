@@ -46,7 +46,7 @@ flux get ks -A
 
 ## Kubectl unseal secret
 ```zsh
-kubectl get secret -n x vault-unseal-keys -o jsonpath='{.data.vault-root}'|base64 -d
+kubectl get secret -n {NS_NAME} {SECRET_NAME} -o jsonpath='{.data.vault-root}'|base64 -d
 ```
 
 ## Kubectl see all verbs

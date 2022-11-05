@@ -24,8 +24,11 @@ Microsoft 365 and Security group owner
 
 ## Implementation
 Create a new access review and select `Teams + Groups`, with `Guest users only` as the Scope.
+
 ![](image-000.png)
+
 At the next tab, you are presented with a host of different options, for example reviewers, duration and what happens when the review period is over. For my test, I choose `Auto apply results to resource` and let Azure AD take recommendations for me. If you are wondering, recommendations could mean to deny or approve the user's continued access. Note the reviewer decision helper checkbox I left checked.
+
 ![](image-001.png)
 
 ### Trial run Guest accounts:

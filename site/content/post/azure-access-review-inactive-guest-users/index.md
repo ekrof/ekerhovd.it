@@ -8,6 +8,7 @@ license:
 hidden: false
 comments: true
 draft: false
+tags : ["Azure","Identity","Governance","AAD","Microsoft"]
 categories:
 - Azure
 ---

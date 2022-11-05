@@ -8,6 +8,7 @@ hidden: false
 comments: true
 draft: false
 image: frontpage.png
+tags : ["Azure","Terraform","Windows","VM","Microsoft"]
 categories:
     - Azure
     - IaC

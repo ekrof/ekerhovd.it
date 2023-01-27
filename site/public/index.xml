@@ -6,34 +6,462 @@
         <description>Recent content on Jonas Ekerhovd</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Mon, 12 Sep 2022 14:57:34 +0100</lastBuildDate><atom:link href="https://ekerhovd.it/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>Coming soon</title>
-        <link>https://ekerhovd.it/blog/coming-soon/</link>
-        <pubDate>Mon, 12 Sep 2022 14:57:34 +0100</pubDate>
+        <lastBuildDate>Sat, 05 Nov 2022 11:18:34 +0100</lastBuildDate><atom:link href="https://ekerhovd.it/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Azure Access Review Inactive Guest Users</title>
+        <link>https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/</link>
+        <pubDate>Sat, 05 Nov 2022 11:18:34 +0100</pubDate>
         
-        <guid>https://ekerhovd.it/blog/coming-soon/</guid>
-        <description>&lt;img src="https://ekerhovd.it/blog/coming-soon/comingsoon.jpg" alt="Featured image of post Coming soon" /&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+        <guid>https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/</guid>
+        <description>&lt;img src="https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/frontpage.png" alt="Featured image of post Azure Access Review Inactive Guest Users" /&gt;&lt;h1 id=&#34;review-and-remove-aad-inactive-guest-users&#34;&gt;Review and remove AAD inactive guest users&lt;/h1&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://techcommunity.microsoft.com/t5/microsoft-entra-azure-ad-blog/review-and-remove-aad-inactive-users-in-public-preview/ba-p/3290632#:~:text=The%20public%20preview%20of%20access%20reviews%20for%20inactive%20users%20enables,covered%20under%20sign%2Din%20activity&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Announced at Microsoft Build 2022&lt;/a&gt; Microsoft implemented additional features to the Identity Governance suite that let administrators review and remove stale accounts that have not signed in for a certain number of days. This, in turn, improves your organization&amp;rsquo;s security posture.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Note: This feature was still in public preview when I tested it, so my results and outcomes may differ depending on the state the tool is in at the time of publishing.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h2&gt;
+&lt;p&gt;Azure AD Premium P2.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A global administrator, user administrator, or identity governance administrator creates reviews on groups or applications.
+Global administrators and privileging role administrators can create reviews on role-assignable groups. For more information, see Use Azure AD groups to manage role assignments.
+Microsoft 365 and Security group owner&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;implementation&#34;&gt;Implementation&lt;/h2&gt;
+&lt;p&gt;Create a new access review and select &lt;code&gt;Teams + Groups&lt;/code&gt;, with &lt;code&gt;Guest users only&lt;/code&gt; as the Scope.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/image-000.png&#34;
+	width=&#34;1237&#34;
+	height=&#34;1012&#34;
+	srcset=&#34;https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/image-000_hu0b724a786b3789f749819977d07d0fbd_141814_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/image-000_hu0b724a786b3789f749819977d07d0fbd_141814_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;122&#34;
+		data-flex-basis=&#34;293px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;At the next tab, you are presented with a host of different options, for example reviewers, duration and what happens when the review period is over. For my test, I choose &lt;code&gt;Auto apply results to resource&lt;/code&gt; and let Azure AD take recommendations for me. If you are wondering, recommendations could mean to deny or approve the user&amp;rsquo;s continued access. Note the reviewer decision helper checkbox I left checked.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/image-001.png&#34;
+	width=&#34;1399&#34;
+	height=&#34;632&#34;
+	srcset=&#34;https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/image-001_hufe8d33329be7d673eeb5b12c6334ad13_281297_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/image-001_hufe8d33329be7d673eeb5b12c6334ad13_281297_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;221&#34;
+		data-flex-basis=&#34;531px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;trial-run-guest-accounts&#34;&gt;Trial run Guest accounts:&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/image-002.png&#34;
+	width=&#34;1680&#34;
+	height=&#34;517&#34;
+	srcset=&#34;https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/image-002_hub673077c9d338fbd46183314a4a3651b_225932_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/image-002_hub673077c9d338fbd46183314a4a3651b_225932_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;324&#34;
+		data-flex-basis=&#34;779px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;results&#34;&gt;Results&lt;/h2&gt;
+&lt;p&gt;The access review was completed on September 1, 2022. There were 212 groups that were included in the scope and matched the criteria of this
+review. After the review period was completed, the decision was made to &lt;code&gt;take recommendations&lt;/code&gt; as per the screenshots above. The result was that
+multiple users that used their access lost their access to the Microsoft 365 Groups, as reported by the customer some days later.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/image-003.png&#34;
+	width=&#34;2346&#34;
+	height=&#34;710&#34;
+	srcset=&#34;https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/image-003_hu63a4f0da8df6a9369e46db6419dd22f2_722905_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/image-003_hu63a4f0da8df6a9369e46db6419dd22f2_722905_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;330&#34;
+		data-flex-basis=&#34;793px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The reason why this happened was that the access review seems to differentiate between interactive and non-interactive sign-ins in AAD. The interactive
+Sign-ins appear to be the only metric the access review checks when enforcing its logic.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://learn.microsoft.com/en-us/azure/active-directory/governance/create-access-review#next-settings&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;As per the documentation&lt;/a&gt;, if you select No sign-in within 30 days, users who have signed in during the previous 30-day period are recommended for approval. Users who haven&amp;rsquo;t signed in during the past 30 days are recommended for denial. This 30-day interval is irrespective of whether the sign-ins were interactive or not.&lt;/p&gt;
+&lt;p&gt;This decision-helper was enabled as per the screenshots in the beginning, so it shouldn&amp;rsquo;t have recommended the guests be removed.&lt;/p&gt;
+&lt;p&gt;For this example guest user, the account was created on &lt;strong&gt;June 21, 2022&lt;/strong&gt;, but it says in AAD that the last sign-in was &lt;strong&gt;January 1, 2001.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;We can see from the screenshots that the same user has had multiple successful sign-ins (non-interactive) in the past month.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/image-004.png&#34;
+	width=&#34;1017&#34;
+	height=&#34;447&#34;
+	srcset=&#34;https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/image-004_hub42d89090be79f3d421950c1402b16be_157646_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/image-004_hub42d89090be79f3d421950c1402b16be_157646_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;227&#34;
+		data-flex-basis=&#34;546px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/image-005.png&#34;
+	width=&#34;619&#34;
+	height=&#34;200&#34;
+	srcset=&#34;https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/image-005_hu2ec7d6cbe8e82b0fb59abf5624a1cf4e_56994_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/image-005_hu2ec7d6cbe8e82b0fb59abf5624a1cf4e_56994_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;309&#34;
+		data-flex-basis=&#34;742px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/image-006.png&#34;
+	width=&#34;1318&#34;
+	height=&#34;847&#34;
+	srcset=&#34;https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/image-006_hu2335a99987a7c83228f3987c5f8e33f4_283667_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/image-006_hu2335a99987a7c83228f3987c5f8e33f4_283667_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;155&#34;
+		data-flex-basis=&#34;373px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;outcome&#34;&gt;Outcome&lt;/h2&gt;
+&lt;p&gt;I decided to revert the actions the access review made and put all the group memberships (manually) back the way they were before. However, I believe the tool is an excellent addition to the already packed feature set of Identity Governance in Azure AD. The functionality might have changed/improved since I wrote this post. As with anything in public preview, run at your own risk. My suggestion would be to run it with the &lt;code&gt;Auto apply results to resource&lt;/code&gt; checkbox turned off to only get an Audit first.&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>CV</title>
+        <link>https://ekerhovd.it/cv/</link>
+        <pubDate>Sun, 30 Oct 2022 00:00:00 +0000</pubDate>
+        
+        <guid>https://ekerhovd.it/cv/</guid>
+        <description>&lt;h1 id=&#34;digital-track-record&#34;&gt;Digital track record&lt;/h1&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;m365-administration&#34;&gt;M365 Administration&lt;/h2&gt;
+&lt;h3 id=&#34;azure-active-directory&#34;&gt;Azure Active Directory&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Worked with free, Premium P1 and P2 features&lt;/li&gt;
+&lt;li&gt;Enterprise/app registrations for authorization for example dropbox license allocation&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;exchange&#34;&gt;Exchange&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Created and modified spam filters after customer needs&lt;/li&gt;
+&lt;li&gt;Following mail flow traces in order to check for interruptions in mail sending and delivery&lt;/li&gt;
+&lt;li&gt;created shared mailboxes, in-place archives and forwarding rules&lt;/li&gt;
+&lt;li&gt;Using eDiscovery for compliance regulations&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;microsoft-365&#34;&gt;Microsoft 365&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;License and app administration&lt;/li&gt;
+&lt;li&gt;Used different types of accounts and knows what permissions each one have&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;microsoft-partner-administration&#34;&gt;Microsoft Partner Administration&lt;/h2&gt;
+&lt;h3 id=&#34;csp&#34;&gt;CSP&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Lead the transfer of Azure Subscriptions from EA to CSP, CSP to CSP, CA to CSP and knows how to set up DPOR/CPOR for customers.&lt;/li&gt;
+&lt;li&gt;Knows the pros/cons of Azure Plan Agreement vs Usage Based subscriptions&lt;/li&gt;
+&lt;li&gt;Collected Microsoft Cloud Agreements - customer approvals/signatures for the majority of the customer base&lt;/li&gt;
+&lt;li&gt;Manage Subscriptions, Software and Azure reservations using CSP&lt;/li&gt;
+&lt;li&gt;Using CSP to open up tickets with Microsoft for our customers and following them up internally&lt;/li&gt;
+&lt;li&gt;Handled partner profile, business locations, billing and user management for Microsky&lt;/li&gt;
+&lt;li&gt;Activated shared services azure subscription for internal use&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;mpn&#34;&gt;MPN&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Ensured the company met the requirements for competency to unlock or remain Gold level membership in both Cloud Platform and Cloud Productivity&lt;/li&gt;
+&lt;li&gt;Used MPN benefits to distribute Azure subscriptions to the entire team as well as interns&lt;/li&gt;
+&lt;li&gt;Used Technical benefits (Partner Advisory Hours) for larger cases and winning customers&lt;/li&gt;
+&lt;li&gt;Activated Cloud Enablement Desk initiative and followed up with Microsoft in order to learn about marketing and Go-to-market benefits with Microsoft&lt;/li&gt;
+&lt;li&gt;Created the Business Profile for Microsky, and enabling the company to get leads through Microsoft Network&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;incentives&#34;&gt;Incentives&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Administering the different programs such as CSP Direct Bill Partner, OSU - M365&lt;/li&gt;
+&lt;li&gt;Added customer associations and writing Proof of Execution documents for existing customers in order to be approved for the programs&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;azure-stack-hub&#34;&gt;Azure Stack Hub&lt;/h2&gt;
+&lt;h3 id=&#34;3-node-lenovo-azure-stack-hub&#34;&gt;3 Node Lenovo Azure Stack Hub&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Managed and operated the Azure Stack hub including hardware replacements, networking, certificate rotation and updating both OEM and Azure Stack Software.&lt;/li&gt;
+&lt;li&gt;Performed cloud migrations for a dozen of clients from VmWare using Veeam restore to Azure Stack.&lt;/li&gt;
+&lt;li&gt;Planning and performed setting up networking using PFsense software VPN to connect to customers existing firewall setup&lt;/li&gt;
+&lt;li&gt;Enabling Veeam Agent Based backup for cloud customers&lt;/li&gt;
+&lt;li&gt;Responsible for administering reports and node stability after planned or unplanned events&lt;/li&gt;
+&lt;li&gt;Used Azure Stack PowerShell tools to ensure our customers had the correct Windows Licensing models&lt;/li&gt;
+&lt;li&gt;Handling Azure Stack Support tickets with Microsoft representatives&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;6-node-dell-emc-azure-stack-hub&#34;&gt;6 Node Dell EMC Azure Stack Hub&lt;/h3&gt;
+&lt;p&gt;Worked for one of the world&amp;rsquo;s largest audit and advisory companies in the planning stages of their cloud environment using Azure ARM templates with Custom Script Extensions for deploying SCOM and integrating with ServiceNow&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Troubleshooting Windows AD join on Azure with Terraform</title>
+        <link>https://ekerhovd.it/blog/troubleshooting-windows-ad-join-on-azure-with-terraform/</link>
+        <pubDate>Sat, 15 Oct 2022 13:19:11 +0200</pubDate>
+        
+        <guid>https://ekerhovd.it/blog/troubleshooting-windows-ad-join-on-azure-with-terraform/</guid>
+        <description>&lt;img src="https://ekerhovd.it/blog/troubleshooting-windows-ad-join-on-azure-with-terraform/frontpage.png" alt="Featured image of post Troubleshooting Windows AD join on Azure with Terraform" /&gt;&lt;p&gt;To start off, we are going to use the &lt;code&gt;JsonADDomainExtension&lt;/code&gt; for Terraform which is going to join our AD domain automatically by using the Azure VM extension.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-terraform&#34; data-lang=&#34;terraform&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kr&#34;&gt;resource&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;azurerm_virtual_machine_extension&amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;vm_adjoin&amp;#34;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;na&#34;&gt;name&lt;/span&gt;                 = &lt;span class=&#34;s2&#34;&gt;&amp;#34;vm-adjoin&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;na&#34;&gt;virtual_machine_id&lt;/span&gt;   = &lt;span class=&#34;nx&#34;&gt;azurerm_windows_virtual_machine&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;vm&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;id&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;na&#34;&gt;publisher&lt;/span&gt;            = &lt;span class=&#34;s2&#34;&gt;&amp;#34;Microsoft.Compute&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;na&#34;&gt;type&lt;/span&gt;                 = &lt;span class=&#34;s2&#34;&gt;&amp;#34;JsonADDomainExtension&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;na&#34;&gt;type_handler_version&lt;/span&gt; = &lt;span class=&#34;s2&#34;&gt;&amp;#34;1.3&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;na&#34;&gt;settings&lt;/span&gt; = &lt;span class=&#34;o&#34;&gt;&amp;lt;&amp;lt;SETTINGS&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;    {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;        &amp;#34;Name&amp;#34;: &amp;#34;yourdomain.net&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;        &amp;#34;OUPath&amp;#34;: &amp;#34;OU=Servers,OU=Resources,DC=yourdomain,DC=net&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;        &amp;#34;User&amp;#34;: &amp;#34;admin@yourdomain.net&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;        &amp;#34;Restart&amp;#34;: &amp;#34;true&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;        &amp;#34;Options&amp;#34;: &amp;#34;3&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;SETTINGS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;na&#34;&gt;protected_settings&lt;/span&gt; = &lt;span class=&#34;o&#34;&gt;&amp;lt;&amp;lt;PROTECTED_SETTINGS&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;    {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;        &amp;#34;Password&amp;#34;: &amp;#34;${data.azurerm_key_vault_secret.adjoin.value}&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;PROTECTED_SETTINGS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;error-code-1355--event-log-event-id-4097-error-64&#34;&gt;Error code 1355 / Event log event ID 4097 error 64&lt;/h2&gt;
+&lt;p&gt;Output from the VM extension tab in Azure Portal&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-console&#34; data-lang=&#34;console&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;go&#34;&gt;[
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;go&#34;&gt;    {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;go&#34;&gt;        &amp;#34;code&amp;#34;: &amp;#34;ComponentStatus/JoinDomainException for Option 3 meaning &amp;#39;User Specified&amp;#39;/failed/1&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;go&#34;&gt;        &amp;#34;level&amp;#34;: &amp;#34;Error&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;go&#34;&gt;        &amp;#34;displayStatus&amp;#34;: &amp;#34;Provisioning failed&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;go&#34;&gt;        &amp;#34;message&amp;#34;: &amp;#34;ERROR - Failed to join domain=&amp;#39;xxx.net&amp;#39;, ou=&amp;#39;OU=Servers,OU=Machines,DC=xxx,DC=net&amp;#39;, user=&amp;#39;adjoin@xxx.net&amp;#39;, option=&amp;#39;NetSetupJoinDomain, NetSetupAcctCreate&amp;#39; (#3 meaning &amp;#39;User Specified&amp;#39;). Error code 1355&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;go&#34;&gt;    },
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;go&#34;&gt;    {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;go&#34;&gt;        &amp;#34;code&amp;#34;: &amp;#34;ComponentStatus/JoinDomainException for Option 1 meaning &amp;#39;User Specified without NetSetupAcctCreate&amp;#39;/failed/1&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;go&#34;&gt;        &amp;#34;level&amp;#34;: &amp;#34;Error&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;go&#34;&gt;        &amp;#34;displayStatus&amp;#34;: &amp;#34;Provisioning failed&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;go&#34;&gt;        &amp;#34;message&amp;#34;: &amp;#34;ERROR - Failed to join domain=&amp;#39;xxx.net&amp;#39;, ou=&amp;#39;OU=TestServers,OU=Machines,DC=xxx,DC=net&amp;#39;, user=&amp;#39;adjoin@xxx.net&amp;#39;, option=&amp;#39;NetSetupJoinDomain&amp;#39; (#1 meaning &amp;#39;User Specified without NetSetupAcctCreate&amp;#39;). Error code 1355&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;go&#34;&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;go&#34;&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;terraform-apply-error-vmextensionprovisioningerror&#34;&gt;Terraform apply error: VMExtensionProvisioningError&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;section&lt;/span&gt; &lt;span class=&#34;na&#34;&gt;id&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;main&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;div&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   &lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;h1&lt;/span&gt; &lt;span class=&#34;na&#34;&gt;id&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;title&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;{{ .Title }}&lt;span class=&#34;p&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;h1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    {{ range .Pages }}
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        {{ .Render &amp;#34;summary&amp;#34;}}
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    {{ end }}
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;div&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;section&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-console&#34; data-lang=&#34;console&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;go&#34;&gt; Error: Code=&amp;#34;VMExtensionProvisioningError&amp;#34; Message=&amp;#34;VM has reported a failure when processing extension &amp;#39;p-vm-adjoin&amp;#39;. Error message: \&amp;#34;Exception(s) occured while joining Domain &amp;#39;xxx-01.net&amp;#39;\&amp;#34;\r\n\r\nMore information on troubleshooting is available at https://aka.ms/vmextensionwindowstroubleshoot &amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;go&#34;&gt;│ 
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;go&#34;&gt;│   with azurerm_virtual_machine_extension.p_vm_adjoin,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;go&#34;&gt;│   on prod.tf line 204, in resource &amp;#34;azurerm_virtual_machine_extension&amp;#34; &amp;#34;p_vm_adjoin&amp;#34;:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;go&#34;&gt;│  204: resource &amp;#34;azurerm_virtual_machine_extension&amp;#34; &amp;#34;p_vm_adjoin&amp;#34; {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;closely-check-the-following&#34;&gt;Closely check the following:&lt;/h2&gt;
+&lt;h3 id=&#34;azure-route-tables&#34;&gt;Azure Route tables&lt;/h3&gt;
+&lt;p&gt;All hub-spoke VNETs need a pair of route tables going to the central FW. Check that both are set up correctly.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/troubleshooting-windows-ad-join-on-azure-with-terraform/image2022-10-11_10-59-25.png&#34;
+	width=&#34;2519&#34;
+	height=&#34;962&#34;
+	srcset=&#34;https://ekerhovd.it/blog/troubleshooting-windows-ad-join-on-azure-with-terraform/image2022-10-11_10-59-25_hu288acaa43bd4d55207f79e8da0a8339c_287457_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/troubleshooting-windows-ad-join-on-azure-with-terraform/image2022-10-11_10-59-25_hu288acaa43bd4d55207f79e8da0a8339c_287457_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;261&#34;
+		data-flex-basis=&#34;628px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;azure-fw-rules&#34;&gt;Azure FW Rules&lt;/h3&gt;
+&lt;p&gt;The VNET/subnet needs to be able to connect to the on-prem DCs for joining the domain. Make sure that the rules are set up correctly:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/troubleshooting-windows-ad-join-on-azure-with-terraform/image2022-10-11_11-1-34.png&#34;
+	width=&#34;1116&#34;
+	height=&#34;249&#34;
+	srcset=&#34;https://ekerhovd.it/blog/troubleshooting-windows-ad-join-on-azure-with-terraform/image2022-10-11_11-1-34_hu14096bd94474bb7aefe591e4722ecfa0_82014_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/troubleshooting-windows-ad-join-on-azure-with-terraform/image2022-10-11_11-1-34_hu14096bd94474bb7aefe591e4722ecfa0_82014_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;448&#34;
+		data-flex-basis=&#34;1075px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;vnet-peering&#34;&gt;VNET Peering&lt;/h3&gt;
+&lt;p&gt;Check that both the Hub + Spoke VNETs have their individual peering in place. If you get an error message like this, it means that the peering is not working:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/troubleshooting-windows-ad-join-on-azure-with-terraform/image2022-10-9_19-23-56.png&#34;
+	width=&#34;921&#34;
+	height=&#34;356&#34;
+	srcset=&#34;https://ekerhovd.it/blog/troubleshooting-windows-ad-join-on-azure-with-terraform/image2022-10-9_19-23-56_hu559876d8969736b65a9398eda0fa6eea_54335_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/troubleshooting-windows-ad-join-on-azure-with-terraform/image2022-10-9_19-23-56_hu559876d8969736b65a9398eda0fa6eea_54335_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;258&#34;
+		data-flex-basis=&#34;620px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;additional-troubleshooting&#34;&gt;Additional troubleshooting&lt;/h2&gt;
+&lt;p&gt;Windows domain joining requires the following ports to be opened. Check from the VM or using built-in azure tools.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;Client Port(s)&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;Server Port&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;Service&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1024-65535/TCP&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;135/TCP&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;RPC Endpoint Mapper&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1024-65535/TCP&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1024-65535/TCP&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;RPC for LSA, SAM, NetLogon (*)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1024-65535/TCP/UDP&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;389/TCP/UDP&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;LDAP&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1024-65535/TCP&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;636/TCP&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;LDAP SSL&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1024-65535/TCP&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;3268/TCP&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;LDAP GC&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1024-65535/TCP&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;3269/TCP&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;LDAP GC SSL&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;53,1024-65535/TCP/UDP&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;53/TCP/UDP&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;DNS&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1024-65535/TCP/UDP&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;88/TCP/UDP&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;Kerberos&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1024-65535/TCP&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;445/TCP&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;SMB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1024-65535/TCP&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1024-65535/TCP&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;FRS RPC (*)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;blockquote&gt;
+&lt;p&gt;PS: Connection troubleshoot is a good tool.
+&lt;img src=&#34;https://ekerhovd.it/blog/troubleshooting-windows-ad-join-on-azure-with-terraform/image2022-10-9_19-29-30.png&#34;
+	width=&#34;871&#34;
+	height=&#34;613&#34;
+	srcset=&#34;https://ekerhovd.it/blog/troubleshooting-windows-ad-join-on-azure-with-terraform/image2022-10-9_19-29-30_hua06ac1c23ebeb2cf83ce90f2818aa19f_94760_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/troubleshooting-windows-ad-join-on-azure-with-terraform/image2022-10-9_19-29-30_hua06ac1c23ebeb2cf83ce90f2818aa19f_94760_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;142&#34;
+		data-flex-basis=&#34;341px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;ad-join-manually-to-test&#34;&gt;AD Join manually to test&lt;/h2&gt;
+&lt;p&gt;If the above points has been verified, the AD join should work as expected, but if not you might want to try joining the domain manually from the VM to troubleshoot.
+Domain join logs are best read from the stored location in Windows VMs:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;%windir%\debug\Netsetup.log&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Event log:
+Error 64 event ID 4097&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/troubleshooting-windows-ad-join-on-azure-with-terraform/image2022-10-10_15-27-32.png&#34;
+	width=&#34;1010&#34;
+	height=&#34;522&#34;
+	srcset=&#34;https://ekerhovd.it/blog/troubleshooting-windows-ad-join-on-azure-with-terraform/image2022-10-10_15-27-32_hu0ef26ba00dc43c2f7aea66f8024b99af_52300_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/troubleshooting-windows-ad-join-on-azure-with-terraform/image2022-10-10_15-27-32_hu0ef26ba00dc43c2f7aea66f8024b99af_52300_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;193&#34;
+		data-flex-basis=&#34;464px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;manually-testing-joining-the-domain&#34;&gt;Manually testing joining the domain:&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/troubleshooting-windows-ad-join-on-azure-with-terraform/image2022-10-10_15-27-1.png&#34;
+	width=&#34;535&#34;
+	height=&#34;300&#34;
+	srcset=&#34;https://ekerhovd.it/blog/troubleshooting-windows-ad-join-on-azure-with-terraform/image2022-10-10_15-27-1_hu43f5a10a857a8b507341727706d9f575_44806_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/troubleshooting-windows-ad-join-on-azure-with-terraform/image2022-10-10_15-27-1_hu43f5a10a857a8b507341727706d9f575_44806_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;178&#34;
+		data-flex-basis=&#34;428px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Error: &lt;code&gt;The specified network name is no longer available&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;resolution&#34;&gt;Resolution&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;In this case, it was missing a route table back from the hub that caused the packets to not come back to the VM. It was fixed by creating the missing route in the hub UDRs.&lt;/p&gt;
+&lt;/blockquote&gt;
 </description>
         </item>
         <item>
@@ -45,22 +473,22 @@
         <description>&lt;h1 id=&#34;hi-im-jonas&#34;&gt;Hi! I&amp;rsquo;m Jonas!&lt;/h1&gt;
 &lt;p&gt;👋 Hello! My name is Jonas Ekerhovd.
 I am a cloud architect, DevOps engineer, IT consultant, and all-round technology enthusiast 🌥&lt;/p&gt;
-&lt;p&gt;Currently located in Bergen, Norway with a long experience with customer service relating to the IT sector.&lt;/p&gt;
-&lt;p&gt;I have a background with information technologies, strategy, marketing and economics. I run this project as a way to become a better writer, and sharing my thoughts about my field.&lt;/p&gt;
-&lt;p&gt;If you want to get in touch, please contact me using the email address below:&lt;/p&gt;
+&lt;p&gt;Currently located in Bergen, Norway. I&amp;rsquo;m working as a cloud architect at Tietoevry.&lt;/p&gt;
+&lt;p&gt;I have a background in information technology, strategy, marketing, and economics. I run this project as a way to become a better writer and share my thoughts about my field.&lt;/p&gt;
+&lt;p&gt;If you want to get in touch, please contact me on twitter or by emailing the address below:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;
 &lt;style&gt;
-  #span-71e91440.cloaked-e-mail:before {
+  #span-9ba2a93c.cloaked-e-mail:before {
     content:attr(data-domain) &#34;\0040&#34; attr(data-user);
     unicode-bidi:bidi-override;
     direction:rtl;
   }
 &lt;/style&gt;
-&amp;#32;&lt;span class=&#34;cloaked-e-mail&#34; data-user=&#34;sanoj&#34; data-domain=&#34;ti.dvohreke&#34; id=&#34;span-71e91440&#34;&gt;&lt;/span&gt;&amp;#32;
+&amp;#32;&lt;span class=&#34;cloaked-e-mail&#34; data-user=&#34;sanoj&#34; data-domain=&#34;ti.dvohreke&#34; id=&#34;span-9ba2a93c&#34;&gt;&lt;/span&gt;&amp;#32;
 
-&lt;script id=&#34;script-71e91440&#34;&gt;
-  var scriptTag = document.getElementById(&#34;script-71e91440&#34;);
+&lt;script id=&#34;script-9ba2a93c&#34;&gt;
+  var scriptTag = document.getElementById(&#34;script-9ba2a93c&#34;);
   var link = document.createElement(&#34;a&#34;);
   var address = &#34;sanoj&#34;.split(&#39;&#39;).reverse().join(&#39;&#39;) + &#34;@&#34; + &#34;ti.dvohreke&#34;.split(&#39;&#39;).reverse().join(&#39;&#39;);
   link.href = &#34;mailto&#34; + &#34;:&#34; + address;
@@ -76,7 +504,7 @@ I am a cloud architect, DevOps engineer, IT consultant, and all-round technology
 &lt;/blockquote&gt;
 &lt;blockquote&gt;
 &lt;p&gt;PS: &lt;a class=&#34;link&#34; href=&#34;https://twitter.com/messages/compose?recipient_id=1553769251994992640&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Twitter DM&amp;rsquo;s&lt;/a&gt; are also open 🐦&lt;/p&gt;
+    &gt;Twitter DM&amp;rsquo;s&lt;/a&gt; are open 🐦&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;under-the-hood&#34;&gt;Under the hood:&lt;/h2&gt;
@@ -100,6 +528,110 @@ I am a cloud architect, DevOps engineer, IT consultant, and all-round technology
         
         <guid>https://ekerhovd.it/archives/</guid>
         <description></description>
+        </item>
+        <item>
+        <title>Kubernetes</title>
+        <link>https://ekerhovd.it/kubernetes/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://ekerhovd.it/kubernetes/</guid>
+        <description>&lt;blockquote&gt;
+&lt;p&gt;ℹ️ Add an alias in your terminal for kubectl to save time using kubernetes CLI&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;powershell&#34;&gt;Powershell&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;Set-Alias&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;-Name&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;-Value&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;kubectl&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;wsl--linux&#34;&gt;WSL / Linux&lt;/h3&gt;
+&lt;p&gt;Add the following lines in your ~/.bashrc file to apply alias&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;alias&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;kubectl&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# Autocomplete&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;source&lt;/span&gt; &amp;lt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;k completion bash &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; sed s/kubectl/k/g&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;kubectl-run-small-busybox-instance-for-debugging&#34;&gt;Kubectl run small busybox instance for debugging&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-zsh&#34; data-lang=&#34;zsh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;kubectl run -i --tty --rm alpine --image&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;alpine -- sh
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;#Enter pod after deployment&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;kubectl &lt;span class=&#34;nb&#34;&gt;exec&lt;/span&gt; -i --tty busybox -- sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;mssql-tools&#34;&gt;MSSQL Tools&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-zsh&#34; data-lang=&#34;zsh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;kubectl run -i mssql-tools --image&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;mcr.microsoft.com/mssql-tools
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sqlcmd -S &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;SERVER_IP&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; -d &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;DB_NAME&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; -U &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;DB_USERNAME&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; -P &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;DB_PASSWORD&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;troubleshoot-k8s-networking-with-netshoot&#34;&gt;Troubleshoot K8S networking with Netshoot&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-zsh&#34; data-lang=&#34;zsh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;kubectl run --rm -i --tty debug --image&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;nicolaka/netshoot --restart&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;Never -- curl -H &lt;span class=&#34;s2&#34;&gt;&amp;#34;Host: mysite.com&amp;#34;&lt;/span&gt; http://&lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;Ingress_IP&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; -v
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;troubleshoot-flux-reconciliation&#34;&gt;Troubleshoot flux reconciliation&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-zsh&#34; data-lang=&#34;zsh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;kubectl get kustomizations.kustomize.toolkit.fluxcd.io -A
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;flux get ks -A 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;kubectl-unseal-secret&#34;&gt;Kubectl unseal secret&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-zsh&#34; data-lang=&#34;zsh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;kubectl get secret -n &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;NS_NAME&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;SECRET_NAME&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; -o &lt;span class=&#34;nv&#34;&gt;jsonpath&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;{.data.vault-root}&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;base64 -d
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;kubectl-see-all-verbs&#34;&gt;Kubectl see all verbs&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-zsh&#34; data-lang=&#34;zsh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;kubectl api-resources --no-headers --sort-by name -o wide &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; sed &lt;span class=&#34;s1&#34;&gt;&amp;#39;s/.*\[//g&amp;#39;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; tr -d &lt;span class=&#34;s2&#34;&gt;&amp;#34;]&amp;#34;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; tr &lt;span class=&#34;s2&#34;&gt;&amp;#34; &amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;\n&amp;#34;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; sort &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; uniq
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description>
         </item>
         <item>
         <title>Links</title>
@@ -135,6 +667,53 @@ I am a cloud architect, DevOps engineer, IT consultant, and all-round technology
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;&lt;code&gt;image&lt;/code&gt; field accepts both local and external images.&lt;/p&gt;
 </description>
+        </item>
+        <item>
+        <title>Powershell</title>
+        <link>https://ekerhovd.it/powershell/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://ekerhovd.it/powershell/</guid>
+        <description>&lt;h2 id=&#34;reboot-3am-oneliner&#34;&gt;Reboot (3am) oneliner:&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;shutdown&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;r &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;t&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;([&lt;/span&gt;&lt;span class=&#34;no&#34;&gt;math&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]::&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Round&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(((&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;New-TimeSpan&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;-start&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;get-date&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;py&#34;&gt;AddDays&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;-1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;-end&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;get-date&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;-hour&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;03&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;-minute&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;-second&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;-format&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;HH:mm:ss&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))).&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;TotalSeconds&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;reboot-wscheduled-task&#34;&gt;Reboot w/Scheduled task&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;$action&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;New-ScheduledTaskAction&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;-Execute&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;Powershell.exe&amp;#39;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;-Argument&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;-NoProfile
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s1&#34;&gt;-WindowStyle Hidden -command &amp;#34;&amp;amp; {Restart-Computer -Force -wait}&amp;#34;&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;$trigger&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;New-ScheduledTaskTrigger&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;-Once&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;-At&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;3am&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;Register-ScheduledTask&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;-Action&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$action&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;-Trigger&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$trigger&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;-TaskName&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;ScheduledReboot&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;find-last-reboot&#34;&gt;Find last reboot&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;get-eventlog&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;System&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;where-object&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$_&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;py&#34;&gt;EventID&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-eq&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;6005&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;sort &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;-desc&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;TimeGenerated&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description>
         </item>
         <item>
         <title>Search</title>

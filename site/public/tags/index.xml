@@ -5,6 +5,71 @@
         <link>https://ekerhovd.it/tags/</link>
         <description>Recent content in Tags on Jonas Ekerhovd</description>
         <generator>Hugo -- gohugo.io</generator>
-        <language>en-us</language><atom:link href="https://ekerhovd.it/tags/index.xml" rel="self" type="application/rss+xml" />
+        <language>en-us</language>
+        <lastBuildDate>Sat, 05 Nov 2022 11:18:34 +0100</lastBuildDate><atom:link href="https://ekerhovd.it/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>AAD</title>
+        <link>https://ekerhovd.it/tags/aad/</link>
+        <pubDate>Sat, 05 Nov 2022 11:18:34 +0100</pubDate>
+        
+        <guid>https://ekerhovd.it/tags/aad/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Azure</title>
+        <link>https://ekerhovd.it/tags/azure/</link>
+        <pubDate>Sat, 05 Nov 2022 11:18:34 +0100</pubDate>
+        
+        <guid>https://ekerhovd.it/tags/azure/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Governance</title>
+        <link>https://ekerhovd.it/tags/governance/</link>
+        <pubDate>Sat, 05 Nov 2022 11:18:34 +0100</pubDate>
+        
+        <guid>https://ekerhovd.it/tags/governance/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Identity</title>
+        <link>https://ekerhovd.it/tags/identity/</link>
+        <pubDate>Sat, 05 Nov 2022 11:18:34 +0100</pubDate>
+        
+        <guid>https://ekerhovd.it/tags/identity/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Microsoft</title>
+        <link>https://ekerhovd.it/tags/microsoft/</link>
+        <pubDate>Sat, 05 Nov 2022 11:18:34 +0100</pubDate>
+        
+        <guid>https://ekerhovd.it/tags/microsoft/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Terraform</title>
+        <link>https://ekerhovd.it/tags/terraform/</link>
+        <pubDate>Sat, 15 Oct 2022 13:19:11 +0200</pubDate>
+        
+        <guid>https://ekerhovd.it/tags/terraform/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>VM</title>
+        <link>https://ekerhovd.it/tags/vm/</link>
+        <pubDate>Sat, 15 Oct 2022 13:19:11 +0200</pubDate>
+        
+        <guid>https://ekerhovd.it/tags/vm/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Windows</title>
+        <link>https://ekerhovd.it/tags/windows/</link>
+        <pubDate>Sat, 15 Oct 2022 13:19:11 +0200</pubDate>
+        
+        <guid>https://ekerhovd.it/tags/windows/</guid>
+        <description></description>
+        </item>
+        
     </channel>
 </rss>

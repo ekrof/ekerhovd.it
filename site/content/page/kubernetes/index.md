@@ -15,6 +15,21 @@ menu:
         params:
             icon: kubernetes
 ---
+> ℹ️ Protip: Add an alias in your terminal for kubectl to save time using kubernetes CLI
+
+**Powershell Alias**
+```powershell
+Set-Alias -Name k -Value kubectl
+```
+**WSL/Linux Alias**
+
+Add the following lines in your ~/.bashrc file to apply alias
+```bash
+alias k='kubectl'
+# Autocomplete
+source <(k completion bash | sed s/kubectl/k/g)
+```
+
 ## Kubectl run small busybox instance for debugging
 
 ```zsh

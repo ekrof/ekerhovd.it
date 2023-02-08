@@ -29,7 +29,12 @@ alias k='kubectl'
 # Autocomplete
 source <(k completion bash | sed s/kubectl/k/g)
 ```
-
+And reload bashrc after applying with the following command:
+```bash
+. ~/.bashrc 
+# OR source ~/.bashrc
+# OR exec bash
+```
 ## Kubectl run small busybox instance for debugging
 
 ```zsh

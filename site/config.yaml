@@ -155,7 +155,7 @@ params:
     opengraph:
         twitter:
             # Your Twitter username
-            site: JonasEkerhovd
+            site: JonasTalks
 
             # Available values: summary, summary_large_image
             card: summary_large_image
@@ -208,7 +208,7 @@ menu:
 
         - identifier: twitter
           name: Twitter
-          url: https://www.twitter.com/@jonasekerhovd
+          url: https://www.twitter.com/@jonastalks
           params:
               icon: brand-twitter
 

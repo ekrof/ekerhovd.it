@@ -6,7 +6,7 @@ aliases:
   - resume
 lastmod: '2022-10-30'
 image:
-draft: false
+draft: true
 readingTime: false
 toc: true
 comments: false

@@ -206,11 +206,11 @@ menu:
           params:
               icon: brand-linkedin
 
-        - identifier: twitter
-          name: Twitter
+        - identifier: x
+          name: X
           url: https://www.twitter.com/@jonastalks
           params:
-              icon: brand-twitter
+              icon: brand-x
 
 
 related:

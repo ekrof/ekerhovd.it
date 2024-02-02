@@ -4,7 +4,7 @@ date: '2022-03-05'
 aliases:
   - about-me
   - contact
-lastmod: '2022-03-05'
+lastmod: '2024-02-02'
 image:
 draft: false
 readingTime: false
@@ -20,18 +20,15 @@ menu:
 
 # Hi! I'm Jonas!
 
-👋 Hello! My name is Jonas Ekerhovd. 
-I am a cloud architect, DevOps engineer, IT consultant, and all-round technology enthusiast 🌥
+👋 Hello! I'm Jonas Ekerhovd, a cloud architect, DevOps engineer, and technology consultant residing in the beautiful city of Bergen, Norway. Currently, I'm making waves at Tietoevry, where I specialize in using the Azure ecosystem to foster innovation, enhance security, and streamline cloud operations.
 
-Currently located in Bergen, Norway. I'm working as a cloud architect at Tietoevry.  
+This blog serves as a platform for me to share insights, reflect on my experiences, and connect with fellow technology enthusiasts and professionals. Through my writing, I aim to demystify the complexities of cloud computing and inspire innovation in the tech community. Join me as we explore the ever-evolving landscape of technology, where the clouds extend far beyond the sky, forming the backbone of our digital future.
 
-I have a background in information technology, strategy, marketing, and economics. I run this project as a way to become a better writer and share my thoughts about my field.
-
-If you want to get in touch, please contact me on twitter or by emailing the address below:
+If you want to get in touch, please contact me on LinkedIn, X or by emailing the address below:
 
 > **{{< cloakemail "jonas@ekerhovd.it" >}}**
 
-> PS: [Twitter DM's](https://twitter.com/messages/compose?recipient_id=1553769251994992640) are open 🐦
+> PS: [![](brand-x.svg) DM's](https://x.com/messages/compose?recipient_id=1553769251994992640) are open 
 
 ---------
 ## Under the hood:

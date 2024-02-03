@@ -5,7 +5,7 @@
         <link>https://ekerhovd.it/</link>
         <description>Recent content on Jonas Ekerhovd</description>
         <generator>Hugo -- gohugo.io</generator>
-        <language>en-us</language>
+        <language>en</language>
         <lastBuildDate>Sat, 05 Nov 2022 11:18:34 +0100</lastBuildDate><atom:link href="https://ekerhovd.it/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>Azure Access Review Inactive Guest Users</title>
         <link>https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/</link>
@@ -128,71 +128,6 @@ Sign-ins appear to be the only metric the access review checks when enforcing it
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;outcome&#34;&gt;Outcome&lt;/h2&gt;
 &lt;p&gt;I decided to revert the actions the access review made and put all the group memberships (manually) back the way they were before. However, I believe the tool is an excellent addition to the already packed feature set of Identity Governance in Azure AD. The functionality might have changed/improved since I wrote this post. As with anything in public preview, run at your own risk. My suggestion would be to run it with the &lt;code&gt;Auto apply results to resource&lt;/code&gt; checkbox turned off to only get an Audit first.&lt;/p&gt;
-</description>
-        </item>
-        <item>
-        <title>CV</title>
-        <link>https://ekerhovd.it/cv/</link>
-        <pubDate>Sun, 30 Oct 2022 00:00:00 +0000</pubDate>
-        
-        <guid>https://ekerhovd.it/cv/</guid>
-        <description>&lt;h1 id=&#34;digital-track-record&#34;&gt;Digital track record&lt;/h1&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;m365-administration&#34;&gt;M365 Administration&lt;/h2&gt;
-&lt;h3 id=&#34;azure-active-directory&#34;&gt;Azure Active Directory&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;Worked with free, Premium P1 and P2 features&lt;/li&gt;
-&lt;li&gt;Enterprise/app registrations for authorization for example dropbox license allocation&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;exchange&#34;&gt;Exchange&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;Created and modified spam filters after customer needs&lt;/li&gt;
-&lt;li&gt;Following mail flow traces in order to check for interruptions in mail sending and delivery&lt;/li&gt;
-&lt;li&gt;created shared mailboxes, in-place archives and forwarding rules&lt;/li&gt;
-&lt;li&gt;Using eDiscovery for compliance regulations&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;microsoft-365&#34;&gt;Microsoft 365&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;License and app administration&lt;/li&gt;
-&lt;li&gt;Used different types of accounts and knows what permissions each one have&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;microsoft-partner-administration&#34;&gt;Microsoft Partner Administration&lt;/h2&gt;
-&lt;h3 id=&#34;csp&#34;&gt;CSP&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;Lead the transfer of Azure Subscriptions from EA to CSP, CSP to CSP, CA to CSP and knows how to set up DPOR/CPOR for customers.&lt;/li&gt;
-&lt;li&gt;Knows the pros/cons of Azure Plan Agreement vs Usage Based subscriptions&lt;/li&gt;
-&lt;li&gt;Collected Microsoft Cloud Agreements - customer approvals/signatures for the majority of the customer base&lt;/li&gt;
-&lt;li&gt;Manage Subscriptions, Software and Azure reservations using CSP&lt;/li&gt;
-&lt;li&gt;Using CSP to open up tickets with Microsoft for our customers and following them up internally&lt;/li&gt;
-&lt;li&gt;Handled partner profile, business locations, billing and user management for Microsky&lt;/li&gt;
-&lt;li&gt;Activated shared services azure subscription for internal use&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;mpn&#34;&gt;MPN&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;Ensured the company met the requirements for competency to unlock or remain Gold level membership in both Cloud Platform and Cloud Productivity&lt;/li&gt;
-&lt;li&gt;Used MPN benefits to distribute Azure subscriptions to the entire team as well as interns&lt;/li&gt;
-&lt;li&gt;Used Technical benefits (Partner Advisory Hours) for larger cases and winning customers&lt;/li&gt;
-&lt;li&gt;Activated Cloud Enablement Desk initiative and followed up with Microsoft in order to learn about marketing and Go-to-market benefits with Microsoft&lt;/li&gt;
-&lt;li&gt;Created the Business Profile for Microsky, and enabling the company to get leads through Microsoft Network&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;incentives&#34;&gt;Incentives&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;Administering the different programs such as CSP Direct Bill Partner, OSU - M365&lt;/li&gt;
-&lt;li&gt;Added customer associations and writing Proof of Execution documents for existing customers in order to be approved for the programs&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;azure-stack-hub&#34;&gt;Azure Stack Hub&lt;/h2&gt;
-&lt;h3 id=&#34;3-node-lenovo-azure-stack-hub&#34;&gt;3 Node Lenovo Azure Stack Hub&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;Managed and operated the Azure Stack hub including hardware replacements, networking, certificate rotation and updating both OEM and Azure Stack Software.&lt;/li&gt;
-&lt;li&gt;Performed cloud migrations for a dozen of clients from VmWare using Veeam restore to Azure Stack.&lt;/li&gt;
-&lt;li&gt;Planning and performed setting up networking using PFsense software VPN to connect to customers existing firewall setup&lt;/li&gt;
-&lt;li&gt;Enabling Veeam Agent Based backup for cloud customers&lt;/li&gt;
-&lt;li&gt;Responsible for administering reports and node stability after planned or unplanned events&lt;/li&gt;
-&lt;li&gt;Used Azure Stack PowerShell tools to ensure our customers had the correct Windows Licensing models&lt;/li&gt;
-&lt;li&gt;Handling Azure Stack Support tickets with Microsoft representatives&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;6-node-dell-emc-azure-stack-hub&#34;&gt;6 Node Dell EMC Azure Stack Hub&lt;/h3&gt;
-&lt;p&gt;Worked for one of the world&amp;rsquo;s largest audit and advisory companies in the planning stages of their cloud environment using Azure ARM templates with Custom Script Extensions for deploying SCOM and integrating with ServiceNow&lt;/p&gt;
 </description>
         </item>
         <item>
@@ -471,31 +406,26 @@ Error 64 event ID 4097&lt;/p&gt;
         
         <guid>https://ekerhovd.it/about/</guid>
         <description>&lt;h1 id=&#34;hi-im-jonas&#34;&gt;Hi! I&amp;rsquo;m Jonas!&lt;/h1&gt;
-&lt;p&gt;👋 Hello! My name is Jonas Ekerhovd.
-I am a cloud architect, DevOps engineer, IT consultant, and all-round technology enthusiast 🌥&lt;/p&gt;
-&lt;p&gt;Currently located in Bergen, Norway. I&amp;rsquo;m working as a cloud architect at Tietoevry.&lt;/p&gt;
-&lt;p&gt;I have a background in information technology, strategy, marketing, and economics. I run this project as a way to become a better writer and share my thoughts about my field.&lt;/p&gt;
-&lt;p&gt;If you want to get in touch, please contact me on twitter or by emailing the address below:&lt;/p&gt;
+&lt;p&gt;👋 Hello! I&amp;rsquo;m Jonas Ekerhovd, a cloud architect, DevOps engineer, and technology consultant residing in the beautiful city of Bergen, Norway. Currently, I&amp;rsquo;m making waves at Tietoevry, where I specialize in using the Azure ecosystem to foster innovation, enhance security, and streamline cloud operations.&lt;/p&gt;
+&lt;p&gt;This blog serves as a platform for me to share insights, reflect on my experiences, and connect with fellow technology enthusiasts and professionals. Through my writing, I aim to demystify the complexities of cloud computing and inspire innovation in the tech community. Join me as we explore the ever-evolving landscape of technology, where the clouds extend far beyond the sky, forming the backbone of our digital future.&lt;/p&gt;
+&lt;p&gt;If you want to get in touch, please contact me on LinkedIn, X or by emailing the address below:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;
 &lt;style&gt;
-  #span-9ba2a93c.cloaked-e-mail:before {
+  #span-6e13752e.cloaked-e-mail:before {
     content:attr(data-domain) &#34;\0040&#34; attr(data-user);
     unicode-bidi:bidi-override;
     direction:rtl;
   }
 &lt;/style&gt;
-&amp;#32;&lt;span class=&#34;cloaked-e-mail&#34; data-user=&#34;sanoj&#34; data-domain=&#34;ti.dvohreke&#34; id=&#34;span-9ba2a93c&#34;&gt;&lt;/span&gt;&amp;#32;
+&amp;#32;&lt;span class=&#34;cloaked-e-mail&#34; data-user=&#34;sanoj&#34; data-domain=&#34;ti.dvohreke&#34; id=&#34;span-6e13752e&#34;&gt;&lt;/span&gt;&amp;#32;
 
-&lt;script id=&#34;script-9ba2a93c&#34;&gt;
-  var scriptTag = document.getElementById(&#34;script-9ba2a93c&#34;);
+&lt;script id=&#34;script-6e13752e&#34;&gt;
+  var scriptTag = document.getElementById(&#34;script-6e13752e&#34;);
   var link = document.createElement(&#34;a&#34;);
   var address = &#34;sanoj&#34;.split(&#39;&#39;).reverse().join(&#39;&#39;) + &#34;@&#34; + &#34;ti.dvohreke&#34;.split(&#39;&#39;).reverse().join(&#39;&#39;);
   link.href = &#34;mailto&#34; + &#34;:&#34; + address;
-  
   link.innerText = address.split(&#39;?&#39;)[0];
-  
-  
   scriptTag.parentElement.insertBefore(link, scriptTag.previousElementSibling);
   scriptTag.parentElement.removeChild(scriptTag.previousElementSibling)
 &lt;/script&gt;
@@ -503,8 +433,15 @@ I am a cloud architect, DevOps engineer, IT consultant, and all-round technology
 &lt;/strong&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;blockquote&gt;
-&lt;p&gt;PS: &lt;a class=&#34;link&#34; href=&#34;https://twitter.com/messages/compose?recipient_id=1553769251994992640&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Twitter DM&amp;rsquo;s&lt;/a&gt; are open 🐦&lt;/p&gt;
+&lt;p&gt;PS: &lt;a class=&#34;link&#34; href=&#34;https://x.com/messages/compose?recipient_id=1553769251994992640&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;&lt;img src=&#34;https://ekerhovd.it/about/brand-x.svg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt; DM&amp;rsquo;s&lt;/a&gt; are open&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;under-the-hood&#34;&gt;Under the hood:&lt;/h2&gt;
@@ -536,9 +473,9 @@ I am a cloud architect, DevOps engineer, IT consultant, and all-round technology
         
         <guid>https://ekerhovd.it/kubernetes/</guid>
         <description>&lt;blockquote&gt;
-&lt;p&gt;ℹ️ Add an alias in your terminal for kubectl to save time using kubernetes CLI&lt;/p&gt;
+&lt;p&gt;ℹ️ Protip: Add an alias in your terminal for kubectl to save time using kubernetes CLI&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h3 id=&#34;powershell&#34;&gt;Powershell&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Powershell Alias&lt;/strong&gt;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
@@ -547,7 +484,7 @@ I am a cloud architect, DevOps engineer, IT consultant, and all-round technology
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;Set-Alias&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;-Name&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;-Value&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;kubectl&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id=&#34;wsl--linux&#34;&gt;WSL / Linux&lt;/h3&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;WSL/Linux Alias&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;Add the following lines in your ~/.bashrc file to apply alias&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -559,6 +496,19 @@ I am a cloud architect, DevOps engineer, IT consultant, and all-round technology
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;alias&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;kubectl&amp;#39;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# Autocomplete&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;source&lt;/span&gt; &amp;lt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;k completion bash &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; sed s/kubectl/k/g&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;And reload bashrc after applying with the following command:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;. ~/.bashrc 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# OR source ~/.bashrc&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# OR exec bash&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;h2 id=&#34;kubectl-run-small-busybox-instance-for-debugging&#34;&gt;Kubectl run small busybox instance for debugging&lt;/h2&gt;

@@ -1,6 +1,6 @@
 ---
 title: The Four Horsemen of Azure SQL Auth
-description: Journey into the realm of Azure SQL authentication and meet the four powerful "horsemen" that can secure your SQL server. From Microsoft Entra MFA to Service Principals, Managed Identities, and Entra ID Service Accounts, explore unique methods with step-by-step guidance and helpful visuals.
+description: Meet the four powerful "horsemen" that can secure your Azure SQL server. From Microsoft Entra MFA to Service Principals, Managed Identities, and Entra ID Service Accounts.
 date: 2024-02-03T08:04:45+01:00
 math: 
 license: 

@@ -27,17 +27,17 @@ Note that we can choose between server-level encryption key and CMK encryption. 
 
 ## Always Encrypted
 
-So, while TDE is on and ensures encryption for DBs, backups, and logs, it doesn’t take into consideration your most sensitive data. Always encrypted with secure enclaves makes it impossible to query and process the protected data in the cloud. It uses client-side encryption with keys that are never visible to the database engine. This can mean that we can prevent a high-privileged user account with existing access to the database from performing certain operations on specific tables and columns for which they are unauthorized. Azure offers two options to enable this, hardware-based SGX and virtualization-based VBS. This feature is available at no additional cost.
+So, while TDE is on and ensures encryption for DBs, backups, and logs, it does not take into consideration your most sensitive data. Always encrypted with secure enclaves makes it impossible to query and process the protected data in the cloud. It uses client-side encryption with keys that are never visible to the database engine. This means that we can prevent a high-privileged user account with existing access to the database from performing certain operations on specific tables and columns for which they are unauthorized. Azure offers two options to enable this, hardware-based SGX and virtualization-based VBS. This feature is available at no additional cost.
 
 [![Always Encrypted uses secure enclaves as illustrated in this diagram](4.png)](https://learn.microsoft.com/en-us/sql/relational-databases/security/encryption/always-encrypted-enclaves?view=sql-server-ver16) 
 
 ### Intel Software Guard eXtensions (SGX)
 
-Hardware-based execution-based environment technology. This feature is only available for DC-series _vCore-based_ SQL Databases which are more costly. If you want to use other SKUs, see the VBS section. It is also available for SQL Server 2019 and later.
+Hardware-based execution-based environment technology. This feature is only available for DC-series _vCore-based_ SQL Databases, which are more costly. If you want to use other SKUs, see the VBS section. It is also available for SQL Server 2019 and later.
 
 If you want to use this kind of encryption, consider if it’s the right use case for your business, as well as the cost/benefit of paying for premium SKU that supports this kind of hardware encryption.
 
-SGX requires you to create and manage an attestation provider and an attestation policy, in which Microsoft recommends you should have role separations assumed by different people where the responsibilities are divided such as one role to handle the attestation, one to be DBA and one for applications that will access the sensitive data.[^2] This follows zero trust model. If you really want to reduce the attack surface for sensitive data, you shouldn’t want a single DBA to handle each role.
+SGX requires you to create and manage an attestation provider and an attestation policy, in which Microsoft recommends having role separations assumed by different people where the responsibilities are divided, such as one role to handle the attestation, one to be DBA and one for applications that will access the sensitive data.[^2] This follows zero trust model. If you want to reduce the attack surface for sensitive data, you shouldn’t have a single DBA to handle each role.
 
 [^2]: https://learn.microsoft.com/en-us/azure/azure-sql/database/always-encrypted-enclaves-plan?view=azuresql#roles-and-responsibilities-when-configuring-intel-sgx-enclaves-and-attestation
 
@@ -53,13 +53,13 @@ With VBS, even if a DBA has high-level access to the system, they cannot access 
 
 A critical distinction between VBS and technologies like Intel's SGX is that VBS provides protection against attacks at the guest OS level, although it does not extend this protection to the host OS. In the context of SQL Database, which is a managed PaaS solution, the responsibility for security and trust is primarily on Microsoft. This reliance means that users entrust Microsoft not only with managing the database infrastructure but also with ensuring the security of their data within the platform. Microsoft ensures that the Hyper-V technology and the VBS feature are continually updated to address new security threats and vulnerabilities.
 
-VBS enclaves are not enabled by default and need to be enabled manually, like the screenshot below shows.
+VBS enclaves are not enabled by default and need to be enabled manually, as the screenshot below shows.
 
 ![](3.png)
 
-This can only be enabled on DB level so one can choose which databases that will be encrypted using secure enclaves.
+This can only be enabled on the DB level so one can choose which databases will be encrypted using secure enclaves.
 
-Let’s try to fill in our database with generated sensitive info and see what happens when accessing encrypted data. First, we need to select which columns are going to be encrypted. This can be done either using SQL queries or selecting them from SSMS.
+Let’s fill in our database with generated sensitive info and see what happens when accessing encrypted data. I'm using the ![AdventureWorks sample databases](https://learn.microsoft.com/en-us/sql/samples/adventureworks-install-configure?view=sql-server-ver16&tabs=ssms) from Microsoft. First, we need to select which columns are going to be encrypted. This can be done either using SQL queries or selecting them from SSMS.
 
 
 ![](5.png)
@@ -89,7 +89,7 @@ To see the decrypted values, connect to the database using Always Encrypted opti
 ![](9.png)
 
 ## Dynamic Data Masking
-I just wanted to add this section here as well, as these two technologies seem quite similar from the outside. Dynamic Data Masking is used to mask sensitive data to non-privileged users. It hides the data instead of encrypting it like we just saw in the binary example above.  
+I wanted to add this section as well, as these two technologies seem quite similar from the outside. Dynamic Data Masking is used to mask sensitive data to non-privileged users. It hides the data instead of encrypting it like we saw in the binary example above.  
 > For example, a social security number 123-45-6789 can be masked to show as XXX-XX-6789 to unauthorized users.
 
 DDM provides a layer of security that disallows unauthorized users to show sensitive data, but it does not provide encryption on the data itself. It has the benefit of lower performance overhead as the masking only happens when the data is being displayed.  

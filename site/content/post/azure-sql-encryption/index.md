@@ -59,7 +59,9 @@ VBS enclaves are not enabled by default and need to be enabled manually, as the 
 
 This can only be enabled on the DB level so one can choose which databases will be encrypted using secure enclaves.
 
-Let’s fill in our database with generated sensitive info and see what happens when accessing encrypted data. I'm using the ![AdventureWorks sample databases](https://learn.microsoft.com/en-us/sql/samples/adventureworks-install-configure?view=sql-server-ver16&tabs=ssms) from Microsoft. First, we need to select which columns are going to be encrypted. This can be done either using SQL queries or selecting them from SSMS.
+Let’s fill in our database with generated sensitive info and see what happens when accessing encrypted data. I'm using the [AdventureWorks sample databases](https://learn.microsoft.com/en-us/sql/samples/adventureworks-install-configure?view=sql-server-ver16&tabs=ssms) from Microsoft. 
+
+First, we need to select which columns are going to be encrypted. This can be done either using SQL queries or selecting them from SSMS.
 
 
 ![](5.png)

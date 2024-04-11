@@ -15,7 +15,7 @@ categories:
 
 # Data Transport
 
-A core focus of the report is on the secure transfer of data from the on-premises UBW HR SQL server database to the Azure SQL server database. It examines the current practices, based on standard SQL server transactional replication and port 1433, and evaluates their effectiveness in preventing data corruption, theft, and unauthorized access.
+A core focus of this blog post is on the secure transfer of data from on-premises SQL server database to an Azure SQL server database. It examines the current practices, based on standard SQL server transactional replication and port 1433, and evaluates their effectiveness in preventing data corruption, theft, and unauthorized access.
 
 ## Dependencies
 
@@ -30,9 +30,11 @@ For securing the traffic when replicating SQL transactions, you would need the f
 
 For one-way directional database replication from on-premises to Azure, one can configure the source server to become a distributor and in extension act as a publisher for its own data. The *subscriber* will be the server that will receive the data, in this case a Microsoft Azure SQL Server, and there’s different types of replications to choose from when going this route. 
 
-Based on your different requirements, the ***transactional*** or ***snapshot replication*** would seem to be the best fit if the data doesn’t need to be the absolute latest version. This would be based on the frequency of updates and changes to the source, as well as what happens afterwards in terms of transformation of the data, like being used in Azure Data Factory or exported to PowerBI.
+Before enabling replication, you need to decide with _type_ of replication you need based on your different requirements. The available types are described in the table below. As an example ***snapshot replication*** would seem to be a good fit if the data doesn’t need to be the absolute latest version. I select ***transactional replication*** as a good starting ground, as you can more or less guarantee transactional consistency. This type of replication will also work when the publisher or subscriber is a non-SQL database, such as Oracle. 
 
-### Types of replication [^1]
+The decision of which replication type you need should be based on the frequency of updates and changes to the source, as well as what happens afterwards in terms of transformation of the data, like being used in Azure Data Factory or exported to PowerBI.
+
+### Types of replication
 | **Type**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      | **Description** |
 | :-------------------------------- | :-------------- |
 | [Transactional replication](https://learn.microsoft.com/en-us/sql/relational-databases/replication/transactional/transactional-replication?view=sql-server-2016) | Changes at the Publisher are delivered to the Subscriber as they occur (in near real time). The data changes are applied to the Subscriber in the same order and within the same transaction boundaries as they occurred on the publisher. |
@@ -42,16 +44,23 @@ Based on your different requirements, the ***transactional*** or ***snapshot rep
 | [Bidirectional](https://learn.microsoft.com/en-us/sql/relational-databases/replication/transactional/bidirectional-transactional-replication?view=sql-server-2016) | Bidirectional transactional replication is a specific transactional replication topology that allows two servers to exchange changes with each other: each server publishes data and then subscribes to a publication with the same data from the other server. |
 | [Updatable Subscriptions](https://learn.microsoft.com/en-us/sql/relational-databases/replication/transactional/updatable-subscriptions-for-transactional-replication?view=sql-server-2016) | Built on the foundation of transactional replication, when data is updated at a Subscriber for an updatable subscription, it is first propagated to the Publisher and then propagated to other Subscribers. |
 
+Source: Microsoft Learn [^1]
 
-### Setup guide for replication
-Microsoft has created guides for the SQL server preparation steps which are much better to follow than to copy the steps in this document. Please follow the guides as directed if applicable:
+### Setup guides for replication
+
+Setting up SQL Server replication involves several steps, and Microsoft provides guides that walk you through the entire process, ensuring you don't miss any critical steps. I won't reiterate them here.
+
+Please follow the guides as directed if applicable:
 #### Server Preparation
-<https://learn.microsoft.com/en-us/sql/relational-databases/replication/tutorial-preparing-the-server-for-replication?view=sql-server-ver16> 
+The [Preparing the Server for Replication](https://learn.microsoft.com/en-us/sql/relational-databases/replication/tutorial-preparing-the-server-for-replication?view=sql-server-ver16) tutorial is an excellent starting point. It covers everything from the basics to more advanced preparation steps. Follow this guide carefully to avoid common pitfalls.
+
+>Personal Tip: Always ensure your server meets the prerequisites outlined in the guides before starting. Skipping these steps can lead to complications down the line.
+
 #### Configure Transactional Replication
-<https://learn.microsoft.com/en-us/sql/relational-databases/replication/tutorial-replicating-data-between-continuously-connected-servers?view=sql-server-ver16>
+Once your server is prepped, you'll move on to configuring transactional replication. This is where the [Replicating Data Between Continuously Connected Servers](https://learn.microsoft.com/en-us/sql/relational-databases/replication/tutorial-replicating-data-between-continuously-connected-servers?view=sql-server-ver16) guide comes into play. It provides a step-by-step walkthrough of setting up transactional replication, ensuring data consistency and integrity across your servers. This guide is crucial for understanding the nuances of transactional replication and getting it right the first time.
 
 ### Azure Networking
-The end goal is to just have all traffic go through the backbone networks of Microsoft. We should also be aware of the “***Allow Azure services and resources to access the server”*** which essentially opens up the internal SQL Firewall to *any* kinds of Azure resources regardless of location and ownership. 
+The end goal is to have all traffic go through the backbone networks of Microsoft. We should also be aware of the ***Allow Azure services and resources to access the server*** which essentially opens up the internal SQL Firewall to *any* kinds of Azure resources regardless of location and ownership. 
 
 
 #### Private Endpoints
@@ -68,14 +77,13 @@ From the private endpoint view:
 
 Take note that the visible FQDN and private link FQDN is not the same. This is important when setting up DNS forwarding later. 
 
-If we try to reach this public server name from the “on-premises” SQL Server, we will only get the azure communication channel virtual IP of [168.63.129.16](https://learn.microsoft.com/en-us/azure/virtual-network/what-is-ip-address-168-63-129-16). 
-
+If we try to reach this public server name from the “on-premises” SQL Server, we will only get the azure communication channel virtual IP of [168.63.129.16](https://learn.microsoft.com/en-us/azure/virtual-network/what-is-ip-address-168-63-129-16) in response. 
 
 Let’s look at the Private DNS Zone which has been set up when deploying the Private Endpoint:
 
-Verify all the VNETs that should be able to resolve the private endpoint FQDNs are linked in this zone:
+Verify that all the VNETs that should be able to resolve the private endpoint FQDNs are linked in this zone:
 
-In Windows DNS Server, you would set up a conditional forwarder that points to the same FQDN as the Azure Private DNS Zone. In this guide we’re using the windows hosts file for simplification, we can add this FQDN Manually:
+In **Windows DNS Server**, you would set up a conditional forwarder that points to the same FQDN as the Azure Private DNS Zone. In this guide we’re using the Windows hosts file for simplification, we can add this FQDN Manually:
 
 If we then try to resolve the SQL server from our “onprem” VM, after editing our hosts file, it should now be able to resolve the address. Notice that the FQDN without “privatelink” in its name is automatically an alias for the resource. Azure creates a canonical name DNS record (CNAME) on the public DNS. The CNAME record redirects the resolution to the private domain name.[^2]
 
@@ -88,9 +96,10 @@ From the VNET blade in Azure Portal:
 
 **Virtual Network -> Settings -> Peerings -> + Add**
 
-
 Verify that the 1433 port is open between the SQL servers:
 
+
+> Note: When the source SQL Server is connected using other forms of network connectivity like VPN or ExpressRoute, the setup would be similar, but you would instead peer the Virtual Network Gateway VNET into the destination SQL VNET or the HUB VNET in a hub-spoke topology.
 
 ## SQL Data Sync
 Data Sync is a managed sync service that uses a hub and spoke topology to synchronize data. You define one of the databases in the sync group as the hub database. The rest of the databases are member databases. Sync occurs only between the hub and individual members.[^3] 
@@ -101,9 +110,9 @@ Make sure that you read through the [requirements and limitations](https://learn
 
 ![Sync data between databases](Aspose.Words.1f18e7b4-69ba-4e40-8308-d4c6484cb14c.015.png)
 
-From the Azure Database view in the portal, select “Sync to other databases” under *Data management*. From there start off by creating a new sync group. Select your metadata database, sync frequency (optional for automatic sync), conflict resolution and username/password for the Hub DB. 
+From the Azure Database view in the portal, select **Sync to other databases** under *Data management*. From there start off by creating a new sync group. Select your metadata database, sync frequency (optional for automatic sync), conflict resolution and username/password for the Hub DB. 
 
->NOTE: Entra-only authentication as described in {{< ref "/post/the-four-horsemen-of-azure-sql-auth" >}}  will not work with SQL Data Sync.
+> NOTE: Entra-only authentication as described in the previous blog post {{< ref "/post/the-four-horsemen-of-azure-sql-auth" >}} will not work with SQL Data Sync.
 
 After registering the agent, register the database you want to sync to Azure. 
 
@@ -117,10 +126,10 @@ Based on your schedule and direction of the sync, the sync should provision succ
 ||**Data Sync**|**Transactional Replication**|
 | :- | :- | :- |
 |**Advantages**|- Active-active support<br>- Bi-directional between on-premises and Azure SQL Database|- Lower latency<br>- Transactional consistency<br>- Reuse existing topology after migration<br>- Azure SQL Managed Instance support|
-|**Disadvantages**|- No transactional consistency<br>- Higher performance impact|- Can't publish from Azure SQL Database<br>- High maintenance cost|
+|**Disadvantages**|- No transactional consistency<br>- Higher performance impact<br>- No Entra-only authentication|- Can't publish from Azure SQL Database<br>- High maintenance cost|
 
 
-[^1]: [Microsoft Learn](https://learn.microsoft.com/en-us/sql/relational-databases/replication/types-of-replication?view=sql-server-ver16)
+[^1]: [https://learn.microsoft.com/en-us/sql/relational-databases/replication/types-of-replication?view=sql-server-ver16 ](https://learn.microsoft.com/en-us/sql/relational-databases/replication/types-of-replication?view=sql-server-ver16)
 
 [^2]: [Microsoft Learn](https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-dns#azure-services-dns-zone-configuration) 
 

@@ -6,7 +6,7 @@ math:
 license: 
 hidden: false
 comments: true
-draft: false
+draft: true
 image: frontpage.png
 tags : ["Azure"]
 categories:
@@ -15,7 +15,9 @@ categories:
 
 # Data Transport
 
-A core focus of this blog post is on the secure transfer of data from on-premises SQL server database to an Azure SQL server database. It examines the current practices, based on standard SQL server transactional replication and port 1433, and evaluates their effectiveness in preventing data corruption, theft, and unauthorized access.
+The process of transferring data from an on-premises SQL server to an Azure SQL server is a critical task for organizations looking to leverage the power and scalability of the cloud. In this blog post, we will explore the ins and outs of data transfer, focusing on the secure and efficient replication of SQL transactions. We will examine the current practices, evaluate their effectiveness in preventing data corruption, theft, and unauthorized access, and provide insights on how to achieve a seamless and reliable transfer process."
+
+A core focus of this blog post is on the secure transfer of data from on-premises SQL server database to an Azure SQL server database.  and evaluates their effectiveness in preventing data corruption, theft, and unauthorized access.
 
 ## Dependencies
 
@@ -62,11 +64,14 @@ Once your server is prepped, you'll move on to configuring transactional replica
 ### Azure Networking
 The end goal is to have all traffic go through the backbone networks of Microsoft. We should also be aware of the ***Allow Azure services and resources to access the server*** which essentially opens up the internal SQL Firewall to *any* kinds of Azure resources regardless of location and ownership. 
 
+![Disallow azure services to access this server](1.png)
+
+![Disable public access](2.png)
 
 #### Private Endpoints
 To start, we can create the private endpoint which will serve us an internal IP where we will direct all our traffic to after the setup has been completed.
 
-
+![Priva](3.png)
 #### DNS Settings
 The private endpoint has an internal IP of 192.168.40.4
 
@@ -125,16 +130,18 @@ Based on your schedule and direction of the sync, the sync should provision succ
 
 ||**Data Sync**|**Transactional Replication**|
 | :- | :- | :- |
-|**Advantages**|- Active-active support<br>- Bi-directional between on-premises and Azure SQL Database|- Lower latency<br>- Transactional consistency<br>- Reuse existing topology after migration<br>- Azure SQL Managed Instance support|
+|**Advantages**|- Active-active support<br>- Bi-directional between on-premises and Azure SQL Database<br>- Cost-efficient|- Lower latency<br>- Transactional consistency<br>- Reuse existing topology after migration<br>- Azure SQL Managed Instance support|
 |**Disadvantages**|- No transactional consistency<br>- Higher performance impact<br>- No Entra-only authentication|- Can't publish from Azure SQL Database<br>- High maintenance cost|
 
+## Conclusion 
+In conclusion, transferring data from an on-premises SQL server database to Azure SQL server is a critical process that requires careful consideration and implementation of secure practices. This blog post has explored various aspects of data transfer, including the types of replication available, setup guides for SQL Server replication, secure networking using private endpoints and DNS settings, and the introduction of SQL Data Sync. By following the guidelines and best practices outlined in this post, organizations can ensure a smooth and secure transfer of data, maintaining data integrity, preventing unauthorized access, and leveraging the power of Azure for data storage and analysis.
 
 [^1]: [https://learn.microsoft.com/en-us/sql/relational-databases/replication/types-of-replication?view=sql-server-ver16 ](https://learn.microsoft.com/en-us/sql/relational-databases/replication/types-of-replication?view=sql-server-ver16)
 
-[^2]: [Microsoft Learn](https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-dns#azure-services-dns-zone-configuration) 
+[^2]: [https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-dns#azure-services-dns-zone-configuration ](https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-dns#azure-services-dns-zone-configuration) 
 
-[^3]: [Microsoft Learn](https://learn.microsoft.com/en-us/azure/azure-sql/database/sql-data-sync-data-sql-server-sql-database?view=azuresql#overview) 
+[^3]: [https://learn.microsoft.com/en-us/azure/azure-sql/database/sql-data-sync-data-sql-server-sql-database?view=azuresql#overview ](https://learn.microsoft.com/en-us/azure/azure-sql/database/sql-data-sync-data-sql-server-sql-database?view=azuresql#overview) 
 
-[^4]: [Microsoft Learn](https://learn.microsoft.com/en-us/azure/azure-sql/database/sql-data-sync-data-sql-server-sql-database?view=azuresql#sync-req-lim) 
+[^4]: [https://learn.microsoft.com/en-us/azure/azure-sql/database/sql-data-sync-data-sql-server-sql-database?view=azuresql#sync-req-lim ](https://learn.microsoft.com/en-us/azure/azure-sql/database/sql-data-sync-data-sql-server-sql-database?view=azuresql#sync-req-lim) 
 
-[^5]: [Microsoft Learn](https://learn.microsoft.com/en-us/azure/azure-sql/database/sql-data-sync-data-sql-server-sql-database?view=azuresql#compare-with-transactional-replication)
+[^5]: [https://learn.microsoft.com/en-us/azure/azure-sql/database/sql-data-sync-data-sql-server-sql-database?view=azuresql#compare-with-transactional-replication ](https://learn.microsoft.com/en-us/azure/azure-sql/database/sql-data-sync-data-sql-server-sql-database?view=azuresql#compare-with-transactional-replication)

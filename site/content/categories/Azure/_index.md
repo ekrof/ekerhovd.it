@@ -4,7 +4,7 @@ description: "Azure category"
 slug: "azure"
 image: "chris-hardy-XF-ZLS5G0QU-unsplash.jpg"
 style:
-    background: "#2a9d8f"
+    background: "#1851a5"
     color: "#fff"
 menu: 
     main:

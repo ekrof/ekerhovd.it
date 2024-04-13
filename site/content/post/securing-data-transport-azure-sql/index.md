@@ -138,7 +138,7 @@ From the Azure Database view in the portal, select **Sync to other databases** u
 ![Create new sync agent](17.png)
 ![Sync metadata configuration](18.png)
 
-> 📢 NOTE: Entra-only authentication as described in the previous blog post {{< ref "/post/the-four-horsemen-of-azure-sql-auth" >}} will not work with SQL Data Sync.
+> 📢 NOTE: Entra-only authentication as described in the [previous blog post]({{< ref "/post/the-four-horsemen-of-azure-sql-auth" >}}) will not work with SQL Data Sync.
 
 After registering the agent, register the database you want to sync to Azure. 
 

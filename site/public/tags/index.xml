@@ -6,20 +6,44 @@
         <description>Recent content in Tags on Jonas Ekerhovd</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
-        <lastBuildDate>Sat, 05 Nov 2022 11:18:34 +0100</lastBuildDate><atom:link href="https://ekerhovd.it/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 06 Apr 2024 21:20:39 +0200</lastBuildDate><atom:link href="https://ekerhovd.it/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Azure</title>
+        <link>https://ekerhovd.it/tags/azure/</link>
+        <pubDate>Sat, 06 Apr 2024 21:20:39 +0200</pubDate>
+        
+        <guid>https://ekerhovd.it/tags/azure/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Azure SQL</title>
+        <link>https://ekerhovd.it/tags/azure-sql/</link>
+        <pubDate>Sat, 06 Apr 2024 21:20:39 +0200</pubDate>
+        
+        <guid>https://ekerhovd.it/tags/azure-sql/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Security</title>
+        <link>https://ekerhovd.it/tags/security/</link>
+        <pubDate>Sat, 06 Apr 2024 21:20:39 +0200</pubDate>
+        
+        <guid>https://ekerhovd.it/tags/security/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>SQL</title>
+        <link>https://ekerhovd.it/tags/sql/</link>
+        <pubDate>Sat, 06 Apr 2024 21:20:39 +0200</pubDate>
+        
+        <guid>https://ekerhovd.it/tags/sql/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>AAD</title>
         <link>https://ekerhovd.it/tags/aad/</link>
         <pubDate>Sat, 05 Nov 2022 11:18:34 +0100</pubDate>
         
         <guid>https://ekerhovd.it/tags/aad/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>Azure</title>
-        <link>https://ekerhovd.it/tags/azure/</link>
-        <pubDate>Sat, 05 Nov 2022 11:18:34 +0100</pubDate>
-        
-        <guid>https://ekerhovd.it/tags/azure/</guid>
         <description></description>
         </item>
         <item>

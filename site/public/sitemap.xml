@@ -2,19 +2,46 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://ekerhovd.it/tags/azure/</loc>
+    <lastmod>2024-04-06T21:20:39+02:00</lastmod>
+  </url><url>
+    <loc>https://ekerhovd.it/categories/azure/</loc>
+    <lastmod>2024-04-06T21:20:39+02:00</lastmod>
+  </url><url>
+    <loc>https://ekerhovd.it/tags/azure-sql/</loc>
+    <lastmod>2024-04-06T21:20:39+02:00</lastmod>
+  </url><url>
+    <loc>https://ekerhovd.it/categories/</loc>
+    <lastmod>2024-04-06T21:20:39+02:00</lastmod>
+  </url><url>
+    <loc>https://ekerhovd.it/</loc>
+    <lastmod>2024-04-06T21:20:39+02:00</lastmod>
+  </url><url>
+    <loc>https://ekerhovd.it/post/</loc>
+    <lastmod>2024-04-06T21:20:39+02:00</lastmod>
+  </url><url>
+    <loc>https://ekerhovd.it/tags/security/</loc>
+    <lastmod>2024-04-06T21:20:39+02:00</lastmod>
+  </url><url>
+    <loc>https://ekerhovd.it/tags/sql/</loc>
+    <lastmod>2024-04-06T21:20:39+02:00</lastmod>
+  </url><url>
+    <loc>https://ekerhovd.it/tags/</loc>
+    <lastmod>2024-04-06T21:20:39+02:00</lastmod>
+  </url><url>
+    <loc>https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/</loc>
+    <lastmod>2024-04-06T21:20:39+02:00</lastmod>
+  </url><url>
+    <loc>https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/</loc>
+    <lastmod>2024-03-03T07:40:42+01:00</lastmod>
+  </url><url>
+    <loc>https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/</loc>
+    <lastmod>2024-02-03T08:04:45+01:00</lastmod>
+  </url><url>
     <loc>https://ekerhovd.it/tags/aad/</loc>
     <lastmod>2022-11-05T11:18:34+01:00</lastmod>
   </url><url>
-    <loc>https://ekerhovd.it/tags/azure/</loc>
-    <lastmod>2022-11-05T11:18:34+01:00</lastmod>
-  </url><url>
-    <loc>https://ekerhovd.it/categories/azure/</loc>
-    <lastmod>2022-11-05T11:18:34+01:00</lastmod>
-  </url><url>
     <loc>https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/</loc>
-    <lastmod>2022-11-05T11:18:34+01:00</lastmod>
-  </url><url>
-    <loc>https://ekerhovd.it/categories/</loc>
     <lastmod>2022-11-05T11:18:34+01:00</lastmod>
   </url><url>
     <loc>https://ekerhovd.it/tags/governance/</loc>
@@ -23,16 +50,7 @@
     <loc>https://ekerhovd.it/tags/identity/</loc>
     <lastmod>2022-11-05T11:18:34+01:00</lastmod>
   </url><url>
-    <loc>https://ekerhovd.it/</loc>
-    <lastmod>2024-02-02T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://ekerhovd.it/tags/microsoft/</loc>
-    <lastmod>2022-11-05T11:18:34+01:00</lastmod>
-  </url><url>
-    <loc>https://ekerhovd.it/post/</loc>
-    <lastmod>2022-11-05T11:18:34+01:00</lastmod>
-  </url><url>
-    <loc>https://ekerhovd.it/tags/</loc>
     <lastmod>2022-11-05T11:18:34+01:00</lastmod>
   </url><url>
     <loc>https://ekerhovd.it/categories/iac/</loc>

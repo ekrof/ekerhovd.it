@@ -6,7 +6,997 @@
         <description>Recent content on Jonas Ekerhovd</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
-        <lastBuildDate>Sat, 05 Nov 2022 11:18:34 +0100</lastBuildDate><atom:link href="https://ekerhovd.it/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 06 Apr 2024 21:20:39 +0200</lastBuildDate><atom:link href="https://ekerhovd.it/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>The Ins and Outs of Data Transfer: On-Premises SQL Server to Azure</title>
+        <link>https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/</link>
+        <pubDate>Sat, 06 Apr 2024 21:20:39 +0200</pubDate>
+        
+        <guid>https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/</guid>
+        <description>&lt;img src="https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/frontpage.png" alt="Featured image of post The Ins and Outs of Data Transfer: On-Premises SQL Server to Azure" /&gt;&lt;h1 id=&#34;data-transport&#34;&gt;Data Transport&lt;/h1&gt;
+&lt;p&gt;The process of transferring data from an on-premises SQL server to an Azure SQL server is a critical task for organizations looking to leverage the power and scalability of the cloud. In this blog post, we will explore the ins and outs of data transfer, focusing on the secure and efficient replication of SQL transactions.&lt;/p&gt;
+&lt;h2 id=&#34;dependencies&#34;&gt;Dependencies&lt;/h2&gt;
+&lt;p&gt;For securing the traffic when replicating SQL transactions, you would need the following:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A source and destination SQL server&lt;/li&gt;
+&lt;li&gt;An Azure tenant with sufficient permissions to deploy and change resources.&lt;/li&gt;
+&lt;li&gt;Optional VPN to route the traffic to and from.&lt;/li&gt;
+&lt;li&gt;Access to DNS forwarders and AD Domain controllers if using.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;standard-replication&#34;&gt;Standard Replication&lt;/h2&gt;
+&lt;p&gt;For one-way directional database replication from on-premises to Azure, one can configure the source server to become a distributor and in extension act as a publisher for its own data. The &lt;em&gt;subscriber&lt;/em&gt; will be the server that will receive the data, in this case a Microsoft Azure SQL Server, and there’s different types of replications to choose from when going this route.&lt;/p&gt;
+&lt;p&gt;Before enabling replication, you need to decide with &lt;em&gt;type&lt;/em&gt; of replication you need based on your different requirements. The available types are described in the table below. As an example &lt;em&gt;&lt;strong&gt;snapshot replication&lt;/strong&gt;&lt;/em&gt; would seem to be a good fit if the data doesn’t need to be the absolute latest version. In this post we are using &lt;em&gt;&lt;strong&gt;transactional replication&lt;/strong&gt;&lt;/em&gt; as it is a good starting ground, as you can more or less guarantee transactional consistency. This type of replication will also work when the publisher or subscriber is a non-SQL database, such as Oracle.&lt;/p&gt;
+&lt;p&gt;The decision of which replication type you need should be based on the frequency of updates and changes to the source, as well as what happens afterwards in terms of transformation of the data, like being used in Azure Data Factory or exported to PowerBI.&lt;/p&gt;
+&lt;h3 id=&#34;types-of-replication1&#34;&gt;Types of replication&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;&lt;strong&gt;Type&lt;/strong&gt;           &lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;&lt;strong&gt;Description&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;a class=&#34;link&#34; href=&#34;https://learn.microsoft.com/en-us/sql/relational-databases/replication/transactional/transactional-replication?view=sql-server-2016&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Transactional replication&lt;/a&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;Changes at the Publisher are delivered to the Subscriber as they occur (in near real time). The data changes are applied to the Subscriber in the same order and within the same transaction boundaries as they occurred on the publisher.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;a class=&#34;link&#34; href=&#34;https://learn.microsoft.com/en-us/sql/relational-databases/replication/merge/merge-replication?view=sql-server-2016&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Merge replication&lt;/a&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;Data can be changed on both the Publisher and Subscriber, and are tracked with triggers. The Subscriber synchronizes with the Publisher when connected to the network and exchanges all rows that have changed between the Publisher and Subscriber since the last time synchronization occurred.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;a class=&#34;link&#34; href=&#34;https://learn.microsoft.com/en-us/sql/relational-databases/replication/snapshot/snapshot-replication?view=sql-server-2016&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Snapshot replication&lt;/a&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;Applies a snapshot from the Publisher to the Subscriber, which distributes data exactly as it appears at a specific moment in time, and does not monitor for updates to the data. When synchronization occurs, the entire snapshot is generated and sent to Subscribers.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;a class=&#34;link&#34; href=&#34;https://learn.microsoft.com/en-us/sql/relational-databases/replication/transactional/peer-to-peer-transactional-replication?view=sql-server-2016&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Peer-to-peer&lt;/a&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;Built on the foundation of transactional replication, peer-to-peer replication propagates transactionally consistent changes in near real-time between multiple server instances.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;a class=&#34;link&#34; href=&#34;https://learn.microsoft.com/en-us/sql/relational-databases/replication/transactional/bidirectional-transactional-replication?view=sql-server-2016&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Bidirectional&lt;/a&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;Bidirectional transactional replication is a specific transactional replication topology that allows two servers to exchange changes with each other: each server publishes data and then subscribes to a publication with the same data from the other server.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;a class=&#34;link&#34; href=&#34;https://learn.microsoft.com/en-us/sql/relational-databases/replication/transactional/updatable-subscriptions-for-transactional-replication?view=sql-server-2016&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Updatable Subscriptions&lt;/a&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;Built on the foundation of transactional replication, when data is updated at a Subscriber for an updatable subscription, it is first propagated to the Publisher and then propagated to other Subscribers.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;setup-guides-for-replication&#34;&gt;Setup guides for replication&lt;/h3&gt;
+&lt;p&gt;Setting up SQL Server replication involves several steps, and Microsoft provides guides that walk you through the entire process, ensuring you don&amp;rsquo;t miss any critical steps. I won&amp;rsquo;t reiterate them here.&lt;/p&gt;
+&lt;p&gt;Please follow the guides as directed if applicable:&lt;/p&gt;
+&lt;h4 id=&#34;server-preparation&#34;&gt;Server Preparation&lt;/h4&gt;
+&lt;p&gt;The &lt;a class=&#34;link&#34; href=&#34;https://learn.microsoft.com/en-us/sql/relational-databases/replication/tutorial-preparing-the-server-for-replication?view=sql-server-ver16&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Preparing the Server for Replication&lt;/a&gt; tutorial is an excellent starting point. It covers everything from the basics to more advanced preparation steps. Follow this guide carefully to avoid common pitfalls.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;📣 Personal Tip: Always ensure your server meets the prerequisites outlined in the guides before starting. Skipping these steps can lead to complications down the line.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;configure-transactional-replication&#34;&gt;Configure Transactional Replication&lt;/h4&gt;
+&lt;p&gt;Once your server is prepped, you&amp;rsquo;ll move on to configuring transactional replication. This is where the &lt;a class=&#34;link&#34; href=&#34;https://learn.microsoft.com/en-us/sql/relational-databases/replication/tutorial-replicating-data-between-continuously-connected-servers?view=sql-server-ver16&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Replicating Data Between Continuously Connected Servers&lt;/a&gt; guide comes into play. It provides a step-by-step walkthrough of setting up transactional replication, ensuring data consistency and integrity across your servers. This guide is crucial for understanding the nuances of transactional replication and getting it right the first time.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;I&amp;rsquo;m using an Azure SQL Server on Azure Windows Virtual Machines as my &lt;em&gt;on-premises&lt;/em&gt; VM for this guide, set up with the guides from above ☝️&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;azure-networking&#34;&gt;Azure Networking&lt;/h3&gt;
+&lt;p&gt;The end goal is to have all traffic go through the backbone networks of Microsoft. We should also be aware of the &lt;code&gt;Allow Azure services and resources to access the server&lt;/code&gt; which essentially opens up the internal SQL Firewall to &lt;em&gt;any&lt;/em&gt; kinds of Azure resources regardless of location and ownership.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/1.png&#34;
+	width=&#34;1393&#34;
+	height=&#34;1189&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/1_hu18b71df4fc6d5ae1b09193ae1470d9bd_389406_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/1_hu18b71df4fc6d5ae1b09193ae1470d9bd_389406_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Disallow azure services to access this server&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;117&#34;
+		data-flex-basis=&#34;281px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/2.png&#34;
+	width=&#34;1441&#34;
+	height=&#34;409&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/2_hud35c82aa65f964be573d537f0502afd5_101852_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/2_hud35c82aa65f964be573d537f0502afd5_101852_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Disable public access&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;352&#34;
+		data-flex-basis=&#34;845px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;private-endpoints&#34;&gt;Private Endpoints&lt;/h4&gt;
+&lt;p&gt;To start, we can create the private endpoint which will serve us an internal IP where we will direct all our traffic to after the setup has been completed.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/3.png&#34;
+	width=&#34;1253&#34;
+	height=&#34;1026&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/3_hu331c2149c596bcbc6e18e344e21813fe_264637_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/3_hu331c2149c596bcbc6e18e344e21813fe_264637_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Enabling private access&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;122&#34;
+		data-flex-basis=&#34;293px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;dns-settings&#34;&gt;DNS Settings&lt;/h4&gt;
+&lt;p&gt;The private endpoint has an internal IP of 192.168.40.4&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/4.png&#34;
+	width=&#34;1564&#34;
+	height=&#34;596&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/4_huee527a7b42cb5790558ce3b58cfe6eca_220441_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/4_huee527a7b42cb5790558ce3b58cfe6eca_220441_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Look for the private IP&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;262&#34;
+		data-flex-basis=&#34;629px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;When creating the Private Endpoint, it will ask you to configure the new Private DNS Zones with it. It will also link the VNET which the Private Endpoint will be created in into this DNS Zone. Essentially it means that the VNETs linked will be able to lookup the records inside.&lt;/p&gt;
+&lt;p&gt;From the private endpoint view:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/5.png&#34;
+	width=&#34;1600&#34;
+	height=&#34;593&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/5_hu7b7433b013d23433b917d799100cd9b3_130459_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/5_hu7b7433b013d23433b917d799100cd9b3_130459_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Private Endpoint portal page&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;269&#34;
+		data-flex-basis=&#34;647px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Take note that the visible FQDN and private link FQDN is not the same. This is important when setting up DNS forwarding later.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;If we try to reach this public server name from the “on-premises” SQL Server, we will only get the azure communication channel virtual IP of &lt;a class=&#34;link&#34; href=&#34;https://learn.microsoft.com/en-us/azure/virtual-network/what-is-ip-address-168-63-129-16&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;168.63.129.16&lt;/a&gt; in response.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/7.png&#34;
+	width=&#34;1122&#34;
+	height=&#34;250&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/7_hubf774b3b7eb2964d867e9b70673aae3e_146148_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/7_hubf774b3b7eb2964d867e9b70673aae3e_146148_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Powershell nslookup&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;448&#34;
+		data-flex-basis=&#34;1077px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Let’s look at the Private DNS Zone which has been set up when deploying the Private Endpoint:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/8.png&#34;
+	width=&#34;1361&#34;
+	height=&#34;802&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/8_hucf8ea5e4f3a644e61e1a8dd85d2003b9_265558_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/8_hucf8ea5e4f3a644e61e1a8dd85d2003b9_265558_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Private DNS Zone View&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;169&#34;
+		data-flex-basis=&#34;407px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Verify that all the VNETs that should be able to resolve the private endpoint FQDNs are linked in this zone:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/9.png&#34;
+	width=&#34;1282&#34;
+	height=&#34;576&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/9_huc944703ea4532c7f0140535d3606c0ca_137926_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/9_huc944703ea4532c7f0140535d3606c0ca_137926_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Virtual Network Links&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;222&#34;
+		data-flex-basis=&#34;534px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;In &lt;strong&gt;Windows DNS Server&lt;/strong&gt;, you would set up a conditional forwarder that points to the same FQDN as the Azure Private DNS Zone. In this guide we’re using the Windows hosts file (&lt;em&gt;C:\Windows\System32\drivers\etc&lt;/em&gt;) for simplification, we can add this FQDN Manually:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/10.png&#34;
+	width=&#34;1247&#34;
+	height=&#34;1008&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/10_hu7e0ec6ea99f545d1f8bb2154667820fb_519153_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/10_hu7e0ec6ea99f545d1f8bb2154667820fb_519153_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Windows Hosts File&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;123&#34;
+		data-flex-basis=&#34;296px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;If we then try to resolve the SQL server from our “onprem” VM, after editing our hosts file, it should now be able to resolve the address. Notice that the FQDN without “privatelink” in its name is automatically an alias for the resource. Azure creates a canonical name DNS record (CNAME) on the public DNS. The CNAME record redirects the resolution to the private domain name.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/11.png&#34;
+	width=&#34;1154&#34;
+	height=&#34;334&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/11_hu1a13f225f723b53b8c364669917295cf_202393_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/11_hu1a13f225f723b53b8c364669917295cf_202393_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;nslookup success&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;345&#34;
+		data-flex-basis=&#34;829px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;network-configuration&#34;&gt;Network configuration&lt;/h4&gt;
+&lt;p&gt;The final step now is to verify the SQL connection between the SQL servers. Even though the DNS is resolving, we are not able to reach the SQL Server from SQL management studio:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/12.png&#34;
+	width=&#34;1256&#34;
+	height=&#34;546&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/12_hu72c27ccc55d1dd15b560203e8f699adb_383934_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/12_hu72c27ccc55d1dd15b560203e8f699adb_383934_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;SSMS Error&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;230&#34;
+		data-flex-basis=&#34;552px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;The reason for this, is because the source “onprem” SQL Server VNET isn’t peered with the destination SQL Server in Azure. Let’s add this.&lt;/p&gt;
+&lt;p&gt;From the VNET blade in Azure Portal:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Virtual Network ➡ Settings ➡ Peerings ➡ + Add&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/13.png&#34;
+	width=&#34;1037&#34;
+	height=&#34;1146&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/13_hud43bc6765d96a89b37cc1f41c284af3c_261869_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/13_hud43bc6765d96a89b37cc1f41c284af3c_261869_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Adding Peering&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;90&#34;
+		data-flex-basis=&#34;217px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Verify that the 1433 port is open between the SQL servers:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/14.png&#34;
+	width=&#34;1176&#34;
+	height=&#34;330&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/14_hu2c17a382b76b58c0592428f1472d4183_193822_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/14_hu2c17a382b76b58c0592428f1472d4183_193822_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;powershell checking for open port 1433&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;356&#34;
+		data-flex-basis=&#34;855px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Note: When the source SQL Server is connected using other forms of network connectivity like VPN or ExpressRoute, the setup would be similar, but you would instead peer the Virtual Network Gateway VNET into the destination SQL VNET or the HUB VNET in a hub-spoke topology.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;sql-data-sync&#34;&gt;SQL Data Sync&lt;/h2&gt;
+&lt;p&gt;Data Sync is another managed sync service that uses a hub and spoke topology to synchronize data. You define one of the databases in the sync group as the hub database. The rest of the databases are member databases. Sync occurs only between the hub and individual members.&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;An important note is that the Hub database must be an Azure SQL Database. If the spoke/member database resides on-oprem, you need to install a local sync agent for this.&lt;/p&gt;
+&lt;p&gt;Make sure that you read through the &lt;a class=&#34;link&#34; href=&#34;https://learn.microsoft.com/en-us/azure/azure-sql/database/sql-data-sync-data-sql-server-sql-database?view=azuresql#sync-req-lim@&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;requirements and limitations&lt;/a&gt;&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt; before setting this up, as the service might not be able to sync all the data that you need.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/15.png&#34;
+	width=&#34;624&#34;
+	height=&#34;308&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/15_hubddfe078814794f755f1bea0f56a7775_45673_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/15_hubddfe078814794f755f1bea0f56a7775_45673_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Picture from Microsoft learn showing the direction of DB sync with SQL data sync&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;202&#34;
+		data-flex-basis=&#34;486px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;From the Azure Database view in the portal, select &lt;strong&gt;Sync to other databases&lt;/strong&gt; under &lt;em&gt;Data management&lt;/em&gt;. From there start off by creating a new sync group. Select your metadata database, sync frequency (optional for automatic sync), conflict resolution and username/password for the Hub DB.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/16.png&#34;
+	width=&#34;1209&#34;
+	height=&#34;719&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/16_hub860c79eef34b001bc992081ec3cbcee_145594_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/16_hub860c79eef34b001bc992081ec3cbcee_145594_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Azure SQL Sync group&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;168&#34;
+		data-flex-basis=&#34;403px&#34;
+	
+&gt;
+&lt;img src=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/17.png&#34;
+	width=&#34;841&#34;
+	height=&#34;534&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/17_hu1560001635e4d7e5da99e80fbfde0f18_121984_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/17_hu1560001635e4d7e5da99e80fbfde0f18_121984_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Create new sync agent&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;157&#34;
+		data-flex-basis=&#34;377px&#34;
+	
+&gt;
+&lt;img src=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/18.png&#34;
+	width=&#34;819&#34;
+	height=&#34;613&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/18_hu78cdc02820651b1804df7d20e7c4eb85_140626_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/18_hu78cdc02820651b1804df7d20e7c4eb85_140626_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Sync metadata configuration&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;133&#34;
+		data-flex-basis=&#34;320px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;📢 NOTE: Entra-only authentication as described in the &lt;a class=&#34;link&#34; href=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/&#34; &gt;previous blog post&lt;/a&gt; will not work with SQL Data Sync.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;After registering the agent, register the database you want to sync to Azure.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/19.png&#34;
+	width=&#34;1282&#34;
+	height=&#34;1020&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/19_hu9596800ade9c9e3e17b56a0a06e00b44_384125_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/19_hu9596800ade9c9e3e17b56a0a06e00b44_384125_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;SQL is reachable&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;125&#34;
+		data-flex-basis=&#34;301px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Select the sync group ➡ Databases ➡ Add an On-Premises Database and select the sync agent from the previous step as well as the database and sync directions you want to use (To the hub, from the hub or bi-directional). Select the tables you want to sync and save.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/20.png&#34;
+	width=&#34;883&#34;
+	height=&#34;608&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/20_hu412856fddd1ba5d88f9895bb946cf1c1_134816_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/20_hu412856fddd1ba5d88f9895bb946cf1c1_134816_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Select which tables to sync&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;145&#34;
+		data-flex-basis=&#34;348px&#34;
+	
+&gt;
+&lt;img src=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/21.png&#34;
+	width=&#34;470&#34;
+	height=&#34;390&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/21_hu8cc9c1203161b004d22a57d25026e991_84362_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/21_hu8cc9c1203161b004d22a57d25026e991_84362_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Select your gateway and database&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;120&#34;
+		data-flex-basis=&#34;289px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Based on your schedule and direction of the sync, the sync should provision successfully after this.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/22.png&#34;
+	width=&#34;1279&#34;
+	height=&#34;714&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/22_hu90f9f1d7a6e3094852a231e25fe4c28a_147881_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-ins-and-outs-of-data-transfer-on-premises-sql-server-to-azure/22_hu90f9f1d7a6e3094852a231e25fe4c28a_147881_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Success!&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;179&#34;
+		data-flex-basis=&#34;429px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;comparison-between-the-sync-methods5&#34;&gt;Comparison between the sync methods&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Data Sync&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Transactional Replication&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Advantages&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;- Active-active support &lt;!-- raw HTML omitted --&gt; - Bi-directional between on-premises and Azure SQL Database &lt;!-- raw HTML omitted --&gt;&lt;/td&gt;
+&lt;td&gt;- Lower latency &lt;!-- raw HTML omitted --&gt; - Transactional consistency &lt;!-- raw HTML omitted --&gt; - Reuse existing topology after migration &lt;!-- raw HTML omitted --&gt; - Azure SQL Managed Instance support&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Disadvantages&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;- No transactional consistency &lt;!-- raw HTML omitted --&gt; - Higher performance impact &lt;!-- raw HTML omitted --&gt; - No Entra-only authentication&lt;/td&gt;
+&lt;td&gt;- Can&amp;rsquo;t publish from Azure SQL Database &lt;!-- raw HTML omitted --&gt; - High maintenance cost&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;In conclusion, transferring data from an on-premises SQL server database to Azure SQL (PaaS) server is a critical process that requires careful consideration and implementation of secure practices. This blog post has explored various aspects of data transfer, including the types of replication available, setup guides for SQL Server replication, secure networking using private endpoints and DNS settings, and the introduction of SQL Data Sync. By following the guidelines and best practices outlined in this post, organizations can ensure a smooth and secure transfer of data, maintaining data integrity, preventing unauthorized access, and leveraging the power of Azure for data storage and analysis.&lt;/p&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://learn.microsoft.com/en-us/sql/relational-databases/replication/types-of-replication?view=sql-server-ver16&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://learn.microsoft.com/en-us/sql/relational-databases/replication/types-of-replication?view=sql-server-ver16 &lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34;&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-dns#azure-services-dns-zone-configuration&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-dns#azure-services-dns-zone-configuration &lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34;&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://learn.microsoft.com/en-us/azure/azure-sql/database/sql-data-sync-data-sql-server-sql-database?view=azuresql#overview&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://learn.microsoft.com/en-us/azure/azure-sql/database/sql-data-sync-data-sql-server-sql-database?view=azuresql#overview &lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34;&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://learn.microsoft.com/en-us/azure/azure-sql/database/sql-data-sync-data-sql-server-sql-database?view=azuresql#sync-req-lim&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://learn.microsoft.com/en-us/azure/azure-sql/database/sql-data-sync-data-sql-server-sql-database?view=azuresql#sync-req-lim &lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:5&#34;&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://learn.microsoft.com/en-us/azure/azure-sql/database/sql-data-sync-data-sql-server-sql-database?view=azuresql#compare-with-transactional-replication&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://learn.microsoft.com/en-us/azure/azure-sql/database/sql-data-sync-data-sql-server-sql-database?view=azuresql#compare-with-transactional-replication &lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+        </item>
+        <item>
+        <title>Mastering Azure SQL Encryption for Better Data Protection</title>
+        <link>https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/</link>
+        <pubDate>Sun, 03 Mar 2024 07:40:42 +0100</pubDate>
+        
+        <guid>https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/</guid>
+        <description>&lt;img src="https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/frontpage.png" alt="Featured image of post Mastering Azure SQL Encryption for Better Data Protection" /&gt;&lt;h1 id=&#34;encryption&#34;&gt;Encryption&lt;/h1&gt;
+&lt;p&gt;When determining the need for encryption, assess how users interact with data. Encryption may be essential for enhancing security when data is accessed via a public network. Additionally, encryption should also be considered in cases where access is limited to a secure intranet setup, as internal threats exist. In all cases, implementing encryption should be accompanied by a plan for maintaining passwords, keys, and certificates.&lt;/p&gt;
+&lt;h2 id=&#34;transparent-data-encryption-tde&#34;&gt;Transparent Data Encryption (TDE)&lt;/h2&gt;
+&lt;p&gt;Transparent data encryption encrypts your data at rest without any changes to your application. This is enabled by default for all databases created after May 2017 and SQL Managed Instance databases created after February 2019. TDE is not used to encrypt system databases like the &lt;em&gt;master&lt;/em&gt; database. To see if you have TDE enabled or enable it, look at the security settings for the database and select Data Encryption.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/1.png&#34;
+	width=&#34;1401&#34;
+	height=&#34;594&#34;
+	srcset=&#34;https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/1_hufe421c5faa0c6f5d1e591e73c0c26ad8_233199_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/1_hufe421c5faa0c6f5d1e591e73c0c26ad8_233199_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;235&#34;
+		data-flex-basis=&#34;566px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Note that we can choose between server-level encryption key and CMK encryption. The former reduces administrative effort and allows Azure to generate a key and manage key rotations for you. CMK allows you to use your own key stored in an Azure Key Vault or Managed HSM (Hardware Security Module).&lt;/p&gt;
+&lt;h2 id=&#34;always-encrypted&#34;&gt;Always Encrypted&lt;/h2&gt;
+&lt;p&gt;So, while TDE is on and ensures encryption for DBs, backups, and logs, it does not take into consideration your most sensitive data. Always encrypted with secure enclaves makes it impossible to query and process the protected data in the cloud. It uses client-side encryption with keys that are never visible to the database engine. This means that we can prevent a high-privileged user account with existing access to the database from performing certain operations on specific tables and columns for which they are unauthorized. Azure offers two options to enable this, hardware-based SGX and virtualization-based VBS. This feature is available at no additional cost.&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://learn.microsoft.com/en-us/sql/relational-databases/security/encryption/always-encrypted-enclaves?view=sql-server-ver16&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;&lt;img src=&#34;https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/4.png&#34;
+	width=&#34;647&#34;
+	height=&#34;191&#34;
+	srcset=&#34;https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/4_hu8784e193b4d91796001f5a51d1cf88d3_52002_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/4_hu8784e193b4d91796001f5a51d1cf88d3_52002_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Always Encrypted uses secure enclaves as illustrated in this diagram&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;338&#34;
+		data-flex-basis=&#34;812px&#34;
+	
+&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;intel-software-guard-extensions-sgx&#34;&gt;Intel Software Guard eXtensions (SGX)&lt;/h3&gt;
+&lt;p&gt;Hardware-based execution-based environment technology. This feature is only available for DC-series &lt;em&gt;vCore-based&lt;/em&gt; SQL Databases, which are more costly. If you want to use other SKUs, see the VBS section. It is also available for SQL Server 2019 and later.&lt;/p&gt;
+&lt;p&gt;If you want to use this kind of encryption, consider if it’s the right use case for your business, as well as the cost/benefit of paying for premium SKU that supports this kind of hardware encryption.&lt;/p&gt;
+&lt;p&gt;SGX requires you to create and manage an attestation provider and an attestation policy, in which Microsoft recommends having role separations assumed by different people where the responsibilities are divided, such as one role to handle the attestation, one to be DBA and one for applications that will access the sensitive data.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; This follows zero trust model. If you want to reduce the attack surface for sensitive data, you shouldn’t have a single DBA to handle each role.&lt;/p&gt;
+&lt;h3 id=&#34;virtualization-based-security-vbs&#34;&gt;Virtualization-based Security (VBS)&lt;/h3&gt;
+&lt;p&gt;Virtualization-based Security (VBS) was first included in Windows 10 and Windows Server 2016 by default. Utilizing Microsoft Hyper-V virtualization technology, VBS effectively isolates specific processes from the operating system. Consequently, information can only be decrypted and processed within the enclave, providing a robust layer of security.&lt;/p&gt;
+&lt;p&gt;VBS enclaves are highly recommended for customers who need to protect data in use, particularly from high-privileged users within their organization, including Database Administrators (DBAs).&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;With VBS, even if a DBA has high-level access to the system, they cannot access the data in plaintext without the necessary cryptographic keys. This setup ensures that sensitive data remains secure and inaccessible to unauthorized personnel.&lt;/p&gt;
+&lt;p&gt;A critical distinction between VBS and technologies like Intel&amp;rsquo;s SGX is that VBS provides protection against attacks at the guest OS level, although it does not extend this protection to the host OS. In the context of SQL Database, which is a managed PaaS solution, the responsibility for security and trust is primarily on Microsoft. This reliance means that users entrust Microsoft not only with managing the database infrastructure but also with ensuring the security of their data within the platform. Microsoft ensures that the Hyper-V technology and the VBS feature are continually updated to address new security threats and vulnerabilities.&lt;/p&gt;
+&lt;p&gt;VBS enclaves are not enabled by default and need to be enabled manually, as the screenshot below shows.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/3.png&#34;
+	width=&#34;1514&#34;
+	height=&#34;667&#34;
+	srcset=&#34;https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/3_hua40a463377e781002cc4eaa8560e259c_268848_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/3_hua40a463377e781002cc4eaa8560e259c_268848_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;226&#34;
+		data-flex-basis=&#34;544px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;This can only be enabled on the DB level so one can choose which databases will be encrypted using secure enclaves.&lt;/p&gt;
+&lt;p&gt;Let’s fill in our database with generated sensitive info and see what happens when accessing encrypted data. I&amp;rsquo;m using the &lt;a class=&#34;link&#34; href=&#34;https://learn.microsoft.com/en-us/sql/samples/adventureworks-install-configure?view=sql-server-ver16&amp;amp;tabs=ssms&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;AdventureWorks sample databases&lt;/a&gt; from Microsoft.&lt;/p&gt;
+&lt;p&gt;First, we need to select which columns are going to be encrypted. This can be done either using SQL queries or selecting them from SSMS.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/5.png&#34;
+	width=&#34;1693&#34;
+	height=&#34;489&#34;
+	srcset=&#34;https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/5_hu6c79a2fa4469cc12f6e8bca05b5e379d_762294_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/5_hu6c79a2fa4469cc12f6e8bca05b5e379d_762294_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;346&#34;
+		data-flex-basis=&#34;830px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;You can launch the wizard at three different levels&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;At a database level - if you want to encrypt multiple columns located in different tables.&lt;/li&gt;
+&lt;li&gt;At a table level - if you want to encrypt multiple columns located in the same table.&lt;/li&gt;
+&lt;li&gt;At a column level - if you want to encrypt one specific column.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;To encrypt&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;Right-click your database, point to Tasks, and then select Encrypt Columns.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/6.png&#34;
+	width=&#34;991&#34;
+	height=&#34;586&#34;
+	srcset=&#34;https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/6_hu8f5b7878551a473db069cac7b98db4fd_294047_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/6_hu8f5b7878551a473db069cac7b98db4fd_294047_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;169&#34;
+		data-flex-basis=&#34;405px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/7.png&#34;
+	width=&#34;1309&#34;
+	height=&#34;446&#34;
+	srcset=&#34;https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/7_hu133e0a10f4cc1c1c28c73e7430145969_142499_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/7_hu133e0a10f4cc1c1c28c73e7430145969_142499_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;293&#34;
+		data-flex-basis=&#34;704px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Running the &lt;code&gt;SELECT&lt;/code&gt; statement again after encryption should give you the same columns in binary ciphertext.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/8.png&#34;
+	width=&#34;1506&#34;
+	height=&#34;450&#34;
+	srcset=&#34;https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/8_hu20d6ec8bdb6c303cf6b574a9b1ef1788_684923_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/8_hu20d6ec8bdb6c303cf6b574a9b1ef1788_684923_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;334&#34;
+		data-flex-basis=&#34;803px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;To see the decrypted values, connect to the database using Always Encrypted option in the connection view.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/9.png&#34;
+	width=&#34;727&#34;
+	height=&#34;790&#34;
+	srcset=&#34;https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/9_hu357d220a7b8f268a41f6adc465cefdf5_192635_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/9_hu357d220a7b8f268a41f6adc465cefdf5_192635_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;92&#34;
+		data-flex-basis=&#34;220px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;dynamic-data-masking&#34;&gt;Dynamic Data Masking&lt;/h2&gt;
+&lt;p&gt;I wanted to add this section as well, as these two technologies seem quite similar from the outside. Dynamic Data Masking is used to mask sensitive data to non-privileged users. It hides the data instead of encrypting it like we saw in the binary example above.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;For example, a social security number 123-45-6789 can be masked to show as XXX-XX-6789 to unauthorized users.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;DDM provides a layer of security that disallows unauthorized users to show sensitive data, but it does not provide encryption on the data itself. It has the benefit of lower performance overhead as the masking only happens when the data is being displayed.&lt;/p&gt;
+&lt;p&gt;DDM Rules can be set up directly in the Azure portal or through T-SQL commands without changes to the application code.&lt;/p&gt;
+&lt;h2 id=&#34;troubleshooting&#34;&gt;&lt;strong&gt;Troubleshooting&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;If you aren’t able to see the decrypted columns, make sure you have &lt;strong&gt;VIEW ANY COLUMN MASTER KEY DEFINITION&lt;/strong&gt; and &lt;strong&gt;VIEW ANY COLUMN ENCRYPTION KEY DEFINITION&lt;/strong&gt; permissions on the DB properties. In SSMS you might also need to add &lt;code&gt;Column Encryption Setting=Enabled&lt;/code&gt; to the Additional Connection Parameters Tab.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/10.png&#34;
+	width=&#34;973&#34;
+	height=&#34;852&#34;
+	srcset=&#34;https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/10_hu6c8c7e1fbd73efa31376c77e757cd8fd_289106_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/10_hu6c8c7e1fbd73efa31376c77e757cd8fd_289106_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;114&#34;
+		data-flex-basis=&#34;274px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/11.png&#34;
+	width=&#34;774&#34;
+	height=&#34;840&#34;
+	srcset=&#34;https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/11_huec8b6602f92ddbef20b44aecbe03a9cd_212329_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/mastering-azure-sql-encryption-for-better-data-protection/11_huec8b6602f92ddbef20b44aecbe03a9cd_212329_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;92&#34;
+		data-flex-basis=&#34;221px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://learn.microsoft.com/en-us/azure/azure-sql/database/always-encrypted-enclaves-plan?view=azuresql#roles-and-responsibilities-when-configuring-intel-sgx-enclaves-and-attestation&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://learn.microsoft.com/en-us/azure/azure-sql/database/always-encrypted-enclaves-plan?view=azuresql#roles-and-responsibilities-when-configuring-intel-sgx-enclaves-and-attestation&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34;&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://learn.microsoft.com/en-us/azure/azure-sql/database/always-encrypted-enclaves-plan?view=azuresql#vbs-enclaves&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://learn.microsoft.com/en-us/azure/azure-sql/database/always-encrypted-enclaves-plan?view=azuresql#vbs-enclaves&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34;&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://learn.microsoft.com/en-us/sql/relational-databases/security/encryption/always-encrypted-wizard?view=sql-server-ver16#open-the-always-encrypted-wizard&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://learn.microsoft.com/en-us/sql/relational-databases/security/encryption/always-encrypted-wizard?view=sql-server-ver16#open-the-always-encrypted-wizard&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+        </item>
+        <item>
+        <title>The Four Horsemen of Azure SQL Auth</title>
+        <link>https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/</link>
+        <pubDate>Sat, 03 Feb 2024 08:04:45 +0100</pubDate>
+        
+        <guid>https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/</guid>
+        <description>&lt;img src="https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/frontpage.png" alt="Featured image of post The Four Horsemen of Azure SQL Auth" /&gt;&lt;p&gt;When it comes to authenticating to Azure SQL server, we are used to authenticating using “basic auth” (SQL Username and password). Although this single factor is not recommended, I still see it very often when working with different clients.&lt;/p&gt;
+&lt;p&gt;The main goal: We want to enforce Entra authentication as the only option.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Note that this may cause issues with existing permissions, so make sure that your applications support this kind of authentication method, especially third-party applications that you don’t administer yourself.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&#34;enabling-entra-only-authentication&#34;&gt;Enabling Entra-Only Authentication&lt;/h1&gt;
+&lt;p&gt;From the SQL Server view in Azure Portal, change the Microsoft Entra ID settings for the server containing the database(s) you want to protect. The “Set admin” button allows you to select either individual users or Entra ID groups. I recommend choosing an Entra ID Group here, as there is built in lifecycle handling if you use the Microsoft Identity Governance suite of services to meet your security and regulatory compliance requirements. You also have the flexibility to add and remove users from the group as needed.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/1.jpg&#34;
+	width=&#34;1579&#34;
+	height=&#34;700&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/1_hueaa785bd2845a0d79005d25602d4fa09_356110_480x0_resize_q75_box.jpg 480w, https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/1_hueaa785bd2845a0d79005d25602d4fa09_356110_1024x0_resize_q75_box.jpg 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;From the SQL Server page in Azure Portal&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;225&#34;
+		data-flex-basis=&#34;541px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;SQL Management Studio error message showing that the changes are active:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/2.jpg&#34;
+	width=&#34;1405&#34;
+	height=&#34;385&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/2_hueaa785bd2845a0d79005d25602d4fa09_245662_480x0_resize_q75_box.jpg 480w, https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/2_hueaa785bd2845a0d79005d25602d4fa09_245662_1024x0_resize_q75_box.jpg 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;SSMS Connect to server window&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;364&#34;
+		data-flex-basis=&#34;875px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Even though I have enforced Microsoft Entra only authentication for this server, it does not mean that you may only sign in as an Entra User. In this post I want to explore the most likely scenarios that you will run into that will work while adhering to the previous policies.&lt;/p&gt;
+&lt;h2 id=&#34;horseman-1-microsoft-entra-mfa&#34;&gt;Horseman 1: Microsoft Entra MFA&lt;/h2&gt;
+&lt;p&gt;Start off by adding an account to the SQL Admins group that are now the only approved auth group for this server. This can be a guest or member account as long as it exists in Entra ID.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Note that the members of this group will get become members of the &lt;code&gt;db_owner&lt;/code&gt; role in every user database, and enter each user database as the dbo user as well as database user in the &lt;code&gt;master&lt;/code&gt; system database. In other words, be mindful of the amount of users that actually need this amount of privilege.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/2-2.png&#34;
+	width=&#34;1611&#34;
+	height=&#34;597&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/2-2_hu78d8a6bdeaa765d93fea0d6387c03817_239760_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/2-2_hu78d8a6bdeaa765d93fea0d6387c03817_239760_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Adding my Entra account to the SQL Admins group&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;269&#34;
+		data-flex-basis=&#34;647px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Select Microsoft Entra MFA from SSMS and enter an email that is a part of the SQL Admin group described above.
+&lt;img src=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/3.jpg&#34;
+	width=&#34;1158&#34;
+	height=&#34;733&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/3_hueaa785bd2845a0d79005d25602d4fa09_308973_480x0_resize_q75_box.jpg 480w, https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/3_hueaa785bd2845a0d79005d25602d4fa09_308973_1024x0_resize_q75_box.jpg 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;SSMS Connect to server using Entra MFA&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;157&#34;
+		data-flex-basis=&#34;379px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;This will open up a browser window and use Microsoft modern authentication with MFA prompt to sign in:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/4.jpg&#34;
+	width=&#34;1178&#34;
+	height=&#34;703&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/4_hueaa785bd2845a0d79005d25602d4fa09_264916_480x0_resize_q75_box.jpg 480w, https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/4_hueaa785bd2845a0d79005d25602d4fa09_264916_1024x0_resize_q75_box.jpg 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Modern Auth&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;167&#34;
+		data-flex-basis=&#34;402px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/4a.png&#34;
+	width=&#34;2720&#34;
+	height=&#34;1236&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/4a_hu876b100147f8b8f31d06bcc78b3e6f3e_986976_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/4a_hu876b100147f8b8f31d06bcc78b3e6f3e_986976_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Success!&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;220&#34;
+		data-flex-basis=&#34;528px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;horseman-2-service-principal&#34;&gt;Horseman 2: Service Principal&lt;/h2&gt;
+&lt;p&gt;Service Principals in Azure are essentially secure authentication identities for automated processes and applications, enabling non-interactive access to Azure resources. Think of them as dedicated accounts for your applications or automation tools, rather than using a personal user&amp;rsquo;s credentials. They&amp;rsquo;re crucial for scripts, CI/CD pipelines, or any application that needs to talk to Azure services without human intervention.&lt;/p&gt;
+&lt;p&gt;Start by creating a new app registration and add a new client secret for this. The secret can last up to 2 years maximum, so make sure to rotate these on schedule. Note down the App Registration (client) ID and Secret value.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/5.jpg&#34;
+	width=&#34;1614&#34;
+	height=&#34;639&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/5_hueaa785bd2845a0d79005d25602d4fa09_344351_480x0_resize_q75_box.jpg 480w, https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/5_hueaa785bd2845a0d79005d25602d4fa09_344351_1024x0_resize_q75_box.jpg 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Creating the Service principal client secret&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;252&#34;
+		data-flex-basis=&#34;606px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;💡 Remember, the service principal will also need to be a member of the sql-admins Entra ID group created in the first step.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/5a.png&#34;
+	width=&#34;1544&#34;
+	height=&#34;529&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/5a_hua0bd03a638447d6c7739152da7439074_236241_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/5a_hua0bd03a638447d6c7739152da7439074_236241_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Adding the Service Principal to the Entra ID Group&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;291&#34;
+		data-flex-basis=&#34;700px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;These will be the inputs when accessing our server using this newly created service principal:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/6.jpg&#34;
+	width=&#34;1167&#34;
+	height=&#34;737&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/6_hueaa785bd2845a0d79005d25602d4fa09_295721_480x0_resize_q75_box.jpg 480w, https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/6_hueaa785bd2845a0d79005d25602d4fa09_295721_1024x0_resize_q75_box.jpg 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;SSMS Authenticating with Service Principal&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;158&#34;
+		data-flex-basis=&#34;380px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/6a.png&#34;
+	width=&#34;3732&#34;
+	height=&#34;836&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/6a_hu40af208a27ed6d7856ffed57be7eb393_914186_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/6a_hu40af208a27ed6d7856ffed57be7eb393_914186_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Success!&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;446&#34;
+		data-flex-basis=&#34;1071px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;horseman-3-managed-identity-user-or-system-assigned&#34;&gt;Horseman 3: Managed Identity (user or system-assigned)&lt;/h2&gt;
+&lt;p&gt;Managed Identities in Azure simplifies how applications authenticate to cloud services, eliminating the need for manual credential management. It automatically provides and manages identities for Azure-hosted applications, allowing secure, straightforward access to Azure services like databases and storage, without the hassle of handling secrets or keys.&lt;/p&gt;
+&lt;p&gt;Start by creating a managed identity that will serve as the account that will authenticate to the same server:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/7.jpg&#34;
+	width=&#34;847&#34;
+	height=&#34;494&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/7_hueaa785bd2845a0d79005d25602d4fa09_206958_480x0_resize_q75_box.jpg 480w, https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/7_hueaa785bd2845a0d79005d25602d4fa09_206958_1024x0_resize_q75_box.jpg 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Creating the Managed Identity in Azure Portal&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;171&#34;
+		data-flex-basis=&#34;411px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Note down the Client ID for the managed identity.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/8.jpg&#34;
+	width=&#34;1241&#34;
+	height=&#34;497&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/8_hueaa785bd2845a0d79005d25602d4fa09_199879_480x0_resize_q75_box.jpg 480w, https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/8_hueaa785bd2845a0d79005d25602d4fa09_199879_1024x0_resize_q75_box.jpg 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Note the Client ID down&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;249&#34;
+		data-flex-basis=&#34;599px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;This will be added to the VM, or application that will use the identity to access the SQL server.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/9.jpg&#34;
+	width=&#34;1419&#34;
+	height=&#34;681&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/9_hueaa785bd2845a0d79005d25602d4fa09_256243_480x0_resize_q75_box.jpg 480w, https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/9_hueaa785bd2845a0d79005d25602d4fa09_256243_1024x0_resize_q75_box.jpg 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Adding the identity to an Azure VM&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;208&#34;
+		data-flex-basis=&#34;500px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;To grant permissions to access Microsoft Graph through an SMI or a UMI, you need to use PowerShell. &lt;a class=&#34;link&#34; href=&#34;https://learn.microsoft.com/en-us/azure/azure-sql/database/authentication-azure-ad-user-assigned-managed-identity?view=azuresql#permissions&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;You can&amp;rsquo;t grant these permissions by using the Azure portal.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/10.png&#34;
+	width=&#34;1641&#34;
+	height=&#34;783&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/10_hu76a50e0bbcc93607e1eebbdfb55d358c_346480_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/10_hu76a50e0bbcc93607e1eebbdfb55d358c_346480_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;After running the PowerShell commands&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;209&#34;
+		data-flex-basis=&#34;502px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;After adding the identity to your application or VM, You will need to create the user inside the database in order to have the roles you intend for this server.&lt;/p&gt;
+&lt;p&gt;Connect to the server using an existing user or the app registration in the previous step. Use the following query on the actual DB to generate the new login:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-SQL&#34; data-lang=&#34;SQL&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;CREATE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;USER&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;sql-managed-identity&amp;#34;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;FROM&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;EXTERNAL&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;PROVIDER&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ALTER&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ROLE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;db_datareader&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ADD&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;MEMBER&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;sql-managed-identity&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ALTER&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ROLE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;db_datawriter&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ADD&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;MEMBER&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;sql-managed-identity&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;GO&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;The username is the same name as the managed identity.&lt;/p&gt;
+&lt;p&gt;Now you should be able to connect to your SQL Server using the Client ID noted down before:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/11.png&#34;
+	width=&#34;1069&#34;
+	height=&#34;703&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/11_hu5a5914c3255e1bd4740ffa2902109379_218470_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/11_hu5a5914c3255e1bd4740ffa2902109379_218470_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;SSMS Connect to server using Managed Identity&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;152&#34;
+		data-flex-basis=&#34;364px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/12a.png&#34;
+	width=&#34;3648&#34;
+	height=&#34;824&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/12a_hufecfe738a82e6385a760dcff32dbc53b_888418_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/12a_hufecfe738a82e6385a760dcff32dbc53b_888418_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Success!&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;442&#34;
+		data-flex-basis=&#34;1062px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Note: Depending on the permissions you want the managed identity to have, you will have to type in the database name in the login window, usually not the &lt;code&gt;master&lt;/code&gt; system database:&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/12.png&#34;
+	width=&#34;1342&#34;
+	height=&#34;543&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/12_hudbaa46c6e52d399097f956cd21a1ccfd_234536_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/12_hudbaa46c6e52d399097f956cd21a1ccfd_234536_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Choosing database connection manually from SSMS&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;247&#34;
+		data-flex-basis=&#34;593px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;horseman-4-entra-id-service-account-without-mfa&#34;&gt;Horseman 4: Entra ID Service Account (without MFA)&lt;/h2&gt;
+&lt;p&gt;While this method is technically not that different from SQL Basic auth, except for the lifecycle handling and sign-in activity logs you get with built-in native accounts in Entra ID. Adhering to the symbolism and theme of this post of the four horsemen, I wanted to add this for those scenarios that the other options won&amp;rsquo;t meet your needs.&lt;/p&gt;
+&lt;p&gt;To exclude individual users (such as service accounts) from entering MFA when authenticating, you need to configure this using &lt;a class=&#34;link&#34; href=&#34;https://learn.microsoft.com/en-us/entra/id-governance/conditional-access-exclusion&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Entra ID Conditional Access&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/13.png&#34;
+	width=&#34;1066&#34;
+	height=&#34;705&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/13_hu46c0ed3507b2f25787e19b00784e93b5_271724_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/13_hu46c0ed3507b2f25787e19b00784e93b5_271724_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;SSMS Using the exempted account to authenticate&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;151&#34;
+		data-flex-basis=&#34;362px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/14.png&#34;
+	width=&#34;1105&#34;
+	height=&#34;699&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/14_hub416be7a97bb0bcfe1a4259017dccc71_321896_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/14_hub416be7a97bb0bcfe1a4259017dccc71_321896_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;SSMS Using the exempted account to authenticate 2&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;158&#34;
+		data-flex-basis=&#34;379px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/15.png&#34;
+	width=&#34;1377&#34;
+	height=&#34;437&#34;
+	srcset=&#34;https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/15_hu84e387d26464be034eb656c1102d3ac5_268392_480x0_resize_box_3.png 480w, https://ekerhovd.it/blog/the-four-horsemen-of-azure-sql-auth/15_hu84e387d26464be034eb656c1102d3ac5_268392_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Success!&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;315&#34;
+		data-flex-basis=&#34;756px&#34;
+	
+&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Azure Access Review Inactive Guest Users</title>
         <link>https://ekerhovd.it/blog/azure-access-review-inactive-guest-users/</link>
         <pubDate>Sat, 05 Nov 2022 11:18:34 +0100</pubDate>
@@ -412,16 +1402,16 @@ Error 64 event ID 4097&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;
 &lt;style&gt;
-  #span-6e13752e.cloaked-e-mail:before {
+  #span-82ac074a.cloaked-e-mail:before {
     content:attr(data-domain) &#34;\0040&#34; attr(data-user);
     unicode-bidi:bidi-override;
     direction:rtl;
   }
 &lt;/style&gt;
-&amp;#32;&lt;span class=&#34;cloaked-e-mail&#34; data-user=&#34;sanoj&#34; data-domain=&#34;ti.dvohreke&#34; id=&#34;span-6e13752e&#34;&gt;&lt;/span&gt;&amp;#32;
+&amp;#32;&lt;span class=&#34;cloaked-e-mail&#34; data-user=&#34;sanoj&#34; data-domain=&#34;ti.dvohreke&#34; id=&#34;span-82ac074a&#34;&gt;&lt;/span&gt;&amp;#32;
 
-&lt;script id=&#34;script-6e13752e&#34;&gt;
-  var scriptTag = document.getElementById(&#34;script-6e13752e&#34;);
+&lt;script id=&#34;script-82ac074a&#34;&gt;
+  var scriptTag = document.getElementById(&#34;script-82ac074a&#34;);
   var link = document.createElement(&#34;a&#34;);
   var address = &#34;sanoj&#34;.split(&#39;&#39;).reverse().join(&#39;&#39;) + &#34;@&#34; + &#34;ti.dvohreke&#34;.split(&#39;&#39;).reverse().join(&#39;&#39;);
   link.href = &#34;mailto&#34; + &#34;:&#34; + address;

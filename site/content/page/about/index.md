@@ -20,7 +20,7 @@ menu:
 
 # Hi! I'm Jonas!
 
-👋 Hello! I'm Jonas Ekerhovd, a cloud architect, DevOps engineer, and technology consultant residing in the beautiful city of Bergen, Norway. Currently, I'm making waves at Tietoevry, where I specialize in using the Azure ecosystem to foster innovation, enhance security, and streamline cloud operations.
+👋 Hello! I'm Jonas Ekerhovd, a cloud architect, DevOps engineer, and technology consultant residing in the beautiful city of Bergen, Norway. Currently, I'm making waves at Vivicta, where I specialize in using the Azure ecosystem to foster innovation, enhance security, and streamline cloud operations.
 
 This blog serves as a platform for me to share insights, reflect on my experiences, and connect with fellow technology enthusiasts and professionals. Through my writing, I aim to demystify the complexities of cloud computing and inspire innovation in the tech community. Join me as we explore the ever-evolving landscape of technology, where the clouds extend far beyond the sky, forming the backbone of our digital future.
 
